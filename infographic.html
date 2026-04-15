@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Jewellery Shopping – System Infographic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdf8ee 0%, #fef9f0 40%, #fff8f0 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #c9a227, #f5d16b, #c9a227);
+      color: #3d2800;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 5px 20px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(197,158,37,0.35);
+    }
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6b4500, #c9a227, #8b5e00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .header p {
+      color: #8a7050;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .header-deco {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .header-deco span { color: #c9a227; font-size: 18px; }
+    .header-line {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a227, transparent);
+      border-radius: 2px;
+    }
+
+    /* ── MAIN LAYOUT ─────────────────────────────────────────── */
+    .diagram {
+      display: grid;
+      grid-template-columns: 1fr 260px 1fr;
+      grid-template-rows: auto auto;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    /* ── COLUMN HEADERS ──────────────────────────────────────── */
+    .col-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .col-header-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    .col-header-icon.user-icon {
+      background: linear-gradient(135deg, #ffeaa7, #fdcb6e, #e17055);
+    }
+    .col-header-icon.admin-icon {
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7, #5a4fcf);
+    }
+    .col-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .col-header h2.user-text { color: #b8640a; }
+    .col-header h2.admin-text { color: #5a4fcf; }
+    .col-header-sub {
+      font-size: 11px;
+      color: #aaa;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* ── FLOW COLUMNS ────────────────────────────────────────── */
+    .flow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ── STEP BOX ────────────────────────────────────────────── */
+    .step {
+      position: relative;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      width: 100%;
+      max-width: 310px;
+      box-shadow: 0 4px 18px rgba(197,158,37,0.13), 0 1px 4px rgba(0,0,0,0.07);
+      border: 1.5px solid rgba(197,158,37,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .step:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(197,158,37,0.22), 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .step-num {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #c9a227, #f5d16b);
+      box-shadow: 0 2px 8px rgba(197,158,37,0.4);
+      flex-shrink: 0;
+    }
+    .step-num.admin-num {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      box-shadow: 0 2px 8px rgba(108,92,231,0.4);
+    }
+    .step-icon {
+      font-size: 20px;
+      min-width: 26px;
+      text-align: center;
+    }
+    .step-content { flex: 1; }
+    .step-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #3d2800;
+      line-height: 1.3;
+    }
+    .step-sub {
+      font-size: 10.5px;
+      color: #9a7a50;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .step-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #fff8e1, #ffe082);
+      border: 1px solid #f5c842;
+      border-radius: 8px;
+      font-size: 9px;
+      font-weight: 600;
+      color: #7a5500;
+      padding: 2px 7px;
+      margin-top: 4px;
+    }
+    .step-tag.admin-tag {
+      background: linear-gradient(135deg, #ede7f6, #b39ddb);
+      border-color: #9575cd;
+      color: #311b92;
+    }
+
+    /* ── ARROW CONNECTOR ─────────────────────────────────────── */
+    .arrow-down {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 28px;
+      position: relative;
+    }
+    .arrow-down::before {
+      content: '';
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(180deg, #c9a227, #f5d16b);
+    }
+    .arrow-down::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #c9a227;
+    }
+    .arrow-down.admin-arrow::before {
+      background: linear-gradient(180deg, #6c5ce7, #a29bfe);
+    }
+    .arrow-down.admin-arrow::after {
+      border-top-color: #6c5ce7;
+    }
+
+    /* ── CENTER COLUMN ───────────────────────────────────────── */
+    .center-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 10px;
+    }
+
+    /* ── SYSTEM TITLE CENTER ─────────────────────────────────── */
+    .system-badge {
+      background: linear-gradient(135deg, #fffde7, #fff9c4, #fffde7);
+      border: 2px solid #c9a227;
+      border-radius: 18px;
+      padding: 15px 18px;
+      text-align: center;
+      box-shadow: 0 6px 24px rgba(197,158,37,0.2);
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    .system-badge .gem { font-size: 28px; margin-bottom: 6px; }
+    .system-badge h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #7a5000;
+      line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .system-badge p {
+      font-size: 9.5px;
+      color: #b8864a;
+      margin-top: 4px;
+    }
+
+    /* ── CENTER FEATURES ─────────────────────────────────────── */
+    .center-feature {
+      background: #fff;
+      border-radius: 12px;
+      border: 1.5px solid rgba(197,158,37,0.25);
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      width: 100%;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+      text-align: center;
+    }
+    .center-feature .cf-icon { font-size: 18px; margin-bottom: 4px; }
+    .center-feature .cf-title { font-size: 11px; font-weight: 600; color: #5a3e00; }
+    .center-feature .cf-sub { font-size: 9.5px; color: #9a7a50; margin-top: 2px; }
+
+    /* ── HORIZONTAL CONNECTORS (left/right to center) ──────── */
+    .h-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .h-line {
+      height: 2px;
+      flex: 1;
+      background: linear-gradient(90deg, #c9a227, #f5d16b, #c9a227);
+      border-radius: 2px;
+    }
+
+    /* ── DATABASE SECTION ────────────────────────────────────── */
+    .db-section {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .db-connectors {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 0;
+    }
+    .db-line-left, .db-line-right {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, #c9a227, #f5d16b);
+      position: relative;
+    }
+    .db-line-right {
+      background: linear-gradient(90deg, #a29bfe, #6c5ce7);
+    }
+    .db-vert {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(180deg, #c9a227, #6c5ce7);
+    }
+    .db-box {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      border-radius: 20px;
+      border: 2.5px solid #c9a227;
+      padding: 24px 40px;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(197,158,37,0.3), 0 4px 16px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .db-box::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(197,158,37,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .db-box::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(108,92,231,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .db-icon { font-size: 42px; margin-bottom: 8px; }
+    .db-title {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #c9a227, #f5d16b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    .db-subtitle { color: #8899bb; font-size: 11px; margin-bottom: 14px; }
+    .db-tables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .db-table {
+      background: rgba(197,158,37,0.1);
+      border: 1px solid rgba(197,158,37,0.3);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 10px;
+      color: #f5d16b;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── DECORATIVE JEWELS ───────────────────────────────────── */
+    .jewel-decor {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .jewel-decor span {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0.12;
+    }
+    .page-wrap { position: relative; z-index: 1; }
+
+    /* ── LEGEND ─────────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: #7a5a30;
+      font-weight: 500;
+    }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .legend-line {
+      width: 28px; height: 2px;
+      border-radius: 2px;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 11px;
+      color: #c9a88a;
+      font-weight: 400;
+    }
+    .footer strong { color: #b8860b; font-weight: 600; }
+
+    /* PRINT / SCREENSHOT FRIENDLY */
+    @media print {
+      body { background: #fff; }
+      .step:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background jewel decorations -->
+<div class="jewel-decor">
+  <span style="top:4%;left:2%">💎</span>
+  <span style="top:8%;right:3%">💍</span>
+  <span style="top:20%;left:0.5%">✨</span>
+  <span style="top:35%;right:1%">📿</span>
+  <span style="top:50%;left:1.5%">💎</span>
+  <span style="top:65%;right:2%">💍</span>
+  <span style="top:80%;left:3%">✨</span>
+  <span style="top:90%;right:4%">📿</span>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+    <div class="header-badge">💎 System Architecture Diagram · College Project</div>
+    <h1>Online Jewellery Shopping Website</h1>
+    <p>Full-Stack System Flow · MySQL Database · Admin &amp; User Modules</p>
+    <div class="header-deco">
+      <div class="header-line"></div>
+      <span>💍</span><span>📿</span><span>💎</span><span>✨</span>
+      <div class="header-line"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN DIAGRAM ═══ -->
+  <div class="diagram">
+
+    <!-- ── USER COLUMN HEADER ── -->
+    <div class="col-header" style="grid-column:1;grid-row:1;">
+      <div class="col-header-icon user-icon">👤</div>
+      <h2 class="user-text">🛍️ User Side Flow</h2>
+      <div class="col-header-sub">Customer Interaction Module</div>
+    </div>
+
+    <!-- ── CENTER COLUMN HEADER ── -->
+    <div class="col-header" style="grid-column:2;grid-row:1;">
+      <div class="col-header-icon" style="background:linear-gradient(135deg,#fff3cd,#f5c842,#c9a227);">⚙️</div>
+      <h2 style="color:#8b6914;">Core System</h2>
+      <div class="col-header-sub">Features &amp; Technologies</div>
+    </div>
+
+    <!-- ── ADMIN COLUMN HEADER ── -->
+    <div class="col-header" style="grid-column:3;grid-row:1;">
+      <div class="col-header-icon admin-icon">🔒</div>
+      <h2 class="admin-text">🛠️ Admin Side Flow</h2>
+      <div class="col-header-sub">Administrator Control Panel</div>
+    </div>
+
+    <!-- ── USER FLOW COLUMN ── -->
+    <div class="flow-col" style="grid-column:1;grid-row:2;">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">🔐</div>
+        <div class="step-content">
+          <div class="step-title">Register / Login</div>
+          <div class="step-sub">Email & password signup, OTP verification, social login</div>
+          <span class="step-tag">Authentication</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">📂</div>
+        <div class="step-content">
+          <div class="step-title">Browse Categories</div>
+          <div class="step-sub">Kolusu · Kammal · Chain · Bangle · Rings · Earrings</div>
+          <span class="step-tag">Product Discovery</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">🔍</div>
+        <div class="step-content">
+          <div class="step-title">Apply Filters</div>
+          <div class="step-sub">Price range · Star Rating · Material (Gold, Silver, Diamond)</div>
+          <span class="step-tag">Smart Search</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-icon">💛</div>
+        <div class="step-content">
+          <div class="step-title">Add to Wishlist / Cart</div>
+          <div class="step-sub">Save favourites, manage shopping cart, update quantities</div>
+          <span class="step-tag">Cart Management</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-icon">⚡</div>
+        <div class="step-content">
+          <div class="step-title">Buy Now</div>
+          <div class="step-sub">Quick purchase, address selection, order confirmation</div>
+          <span class="step-tag">Checkout</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-icon">💳</div>
+        <div class="step-content">
+          <div class="step-title">Payment Options</div>
+          <div class="step-sub">📱 GPay &nbsp;·&nbsp; 📲 PhonePe &nbsp;·&nbsp; 💵 Cash on Delivery</div>
+          <span class="step-tag">Secure Payment</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-icon">📦</div>
+        <div class="step-content">
+          <div class="step-title">Order Tracking</div>
+          <div class="step-sub">Real-time status: Packed → Shipped → Delivered</div>
+          <span class="step-tag">Live Tracking</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-icon">⭐</div>
+        <div class="step-content">
+          <div class="step-title">Product Reviews &amp; Ratings</div>
+          <div class="step-sub">Rate products 1–5 stars, write detailed reviews</div>
+          <span class="step-tag">Community Feedback</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-icon">🏷️</div>
+        <div class="step-content">
+          <div class="step-title">Discounts &amp; Offers</div>
+          <div class="step-sub">Coupon codes, seasonal sales, member-only deals</div>
+          <span class="step-tag">Promotions</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">10</div>
+        <div class="step-icon">📍</div>
+        <div class="step-content">
+          <div class="step-title">Manage Address</div>
+          <div class="step-sub">Add, edit, delete delivery addresses, set default</div>
+          <span class="step-tag">Address Book</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">11</div>
+        <div class="step-icon">📄</div>
+        <div class="step-content">
+          <div class="step-title">Download Invoice</div>
+          <div class="step-sub">PDF invoice generation, GST details, order summary</div>
+          <span class="step-tag">Invoice PDF</span>
+        </div>
+      </div>
+      <div class="arrow-down"></div>
+
+      <div class="step">
+        <div class="step-num">12</div>
+        <div class="step-icon">🕒</div>
+        <div class="step-content">
+          <div class="step-title">Recently Viewed Items</div>
+          <div class="step-sub">Last 20 viewed products history, quick re-access</div>
+          <span class="step-tag">Browsing History</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── CENTER COLUMN ── -->
+    <div class="center-col" style="grid-column:2;grid-row:2;">
+
+      <div class="system-badge">
+        <div class="gem">💎</div>
+        <h3>Jewels.com<br/>Shopping System</h3>
+        <p>PHP · MySQL · HTML · CSS · JS</p>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">🌐</div>
+        <div class="cf-title">Web Technologies</div>
+        <div class="cf-sub">HTML5 · CSS3 · JavaScript · PHP 8</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">🔒</div>
+        <div class="cf-title">Security Layer</div>
+        <div class="cf-sub">SSL · Session Mgmt · SQL Injection Protection</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">📧</div>
+        <div class="cf-title">Notifications</div>
+        <div class="cf-sub">Email Alerts · SMS Updates · Push Notifications</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">📱</div>
+        <div class="cf-title">Responsive Design</div>
+        <div class="cf-sub">Mobile · Tablet · Desktop Friendly</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">📊</div>
+        <div class="cf-title">Analytics Engine</div>
+        <div class="cf-sub">Sales Charts · Trend Analysis · Reports</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">☁️</div>
+        <div class="cf-title">Image Storage</div>
+        <div class="cf-sub">Product photos · CDN · Thumbnails</div>
+      </div>
+
+      <div class="center-feature">
+        <div class="cf-icon">🔗</div>
+        <div class="cf-title">Payment Gateway</div>
+        <div class="cf-sub">Razorpay · UPI · COD Integration</div>
+      </div>
+
+    </div>
+
+    <!-- ── ADMIN FLOW COLUMN ── -->
+    <div class="flow-col" style="grid-column:3;grid-row:2;">
+
+      <div class="step">
+        <div class="step-num admin-num">A</div>
+        <div class="step-icon">🔑</div>
+        <div class="step-content">
+          <div class="step-title">Admin Login</div>
+          <div class="step-sub">Secure dashboard access, role-based permissions</div>
+          <span class="step-tag admin-tag">Admin Auth</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">B</div>
+        <div class="step-icon">📂</div>
+        <div class="step-content">
+          <div class="step-title">Manage Categories</div>
+          <div class="step-sub">Add, edit, delete jewellery categories and sub-categories</div>
+          <span class="step-tag admin-tag">Category Admin</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">C</div>
+        <div class="step-icon">💍</div>
+        <div class="step-content">
+          <div class="step-title">Add / Edit Products</div>
+          <div class="step-sub">Upload images, set price, description, weight, purity</div>
+          <span class="step-tag admin-tag">Product CRUD</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">D</div>
+        <div class="step-icon">📦</div>
+        <div class="step-content">
+          <div class="step-title">Order Management</div>
+          <div class="step-sub">View, accept, process, dispatch &amp; complete orders</div>
+          <span class="step-tag admin-tag">Order Control</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">E</div>
+        <div class="step-icon">🎁</div>
+        <div class="step-content">
+          <div class="step-title">Coupon &amp; Offers Mgmt</div>
+          <div class="step-sub">Create discount codes, set validity, usage limits</div>
+          <span class="step-tag admin-tag">Promotions</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">F</div>
+        <div class="step-icon">👥</div>
+        <div class="step-content">
+          <div class="step-title">User Management</div>
+          <div class="step-sub">View accounts, block/unblock users, view purchase history</div>
+          <span class="step-tag admin-tag">User Control</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">G</div>
+        <div class="step-icon">📊</div>
+        <div class="step-content">
+          <div class="step-title">Stock Management</div>
+          <div class="step-sub">Track inventory, low-stock alerts, restock requests</div>
+          <span class="step-tag admin-tag">Inventory</span>
+        </div>
+      </div>
+      <div class="arrow-down admin-arrow"></div>
+
+      <div class="step">
+        <div class="step-num admin-num">H</div>
+        <div class="step-icon">📈</div>
+        <div class="step-content">
+          <div class="step-title">Sales Reports &amp; Analytics</div>
+          <div class="step-sub">Revenue charts, best-sellers, customer trends dashboard</div>
+          <span class="step-tag admin-tag">Analytics</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── DATABASE SECTION ── -->
+    <div class="db-section">
+
+      <!-- Arrow from center going down -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:0;">
+        <div style="width:2px;height:36px;background:linear-gradient(180deg,#c9a227,#6c5ce7);"></div>
+        <div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #6c5ce7;margin-bottom:4px;"></div>
+      </div>
+
+      <!-- DB Box -->
+      <div class="db-box">
+        <div class="db-icon">🗄️</div>
+        <div class="db-title">MySQL Database</div>
+        <div class="db-subtitle">Central Data Storage · XAMPP / Apache · phpMyAdmin</div>
+        <div class="db-tables">
+          <div class="db-table">👤 users</div>
+          <div class="db-table">📦 products</div>
+          <div class="db-table">🛒 orders</div>
+          <div class="db-table">💳 payments</div>
+          <div class="db-table">📂 categories</div>
+          <div class="db-table">💛 wishlist</div>
+          <div class="db-table">🏷️ coupons</div>
+          <div class="db-table">⭐ reviews</div>
+          <div class="db-table">📍 addresses</div>
+          <div class="db-table">📊 stock</div>
+          <div class="db-table">🕒 sessions</div>
+          <div class="db-table">📈 analytics</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- end .diagram -->
+
+  <!-- ── LEGEND ── -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:linear-gradient(135deg,#c9a227,#f5d16b);"></div>
+      User Flow
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);"></div>
+      Admin Flow
+    </div>
+    <div class="legend-item">
+      <div class="legend-line" style="background:linear-gradient(90deg,#c9a227,#f5d16b);"></div>
+      Connected Module
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);border:2px solid #c9a227;"></div>
+      MySQL Database
+    </div>
+    <div class="legend-item">
+      💎 Jewellery Categories: Kolusu · Kammal · Chain · Bangle · Ring · Earring
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <strong>Online Jewellery Shopping Website System</strong> &nbsp;·&nbsp;
+    System Architecture Diagram &nbsp;·&nbsp;
+    Designed for College Project Presentation &nbsp;·&nbsp;
+    Built with PHP + MySQL + XAMPP
+    <br />
+    <span style="font-size:16px;letter-spacing:3px;margin-top:8px;display:inline-block;">💍 📿 💎 ✨ 📿 💍</span>
+  </div>
+
+</div><!-- end .page-wrap -->
+</body>
+</html>
