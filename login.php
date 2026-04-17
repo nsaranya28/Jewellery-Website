@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user']    = ['id'=>$user['id'],'name'=>$user['name'],'email'=>$user['email']];
     // Merge guest cart
-    $pdo->prepare("UPDATE cart SET user_id=?, session_id=NULL WHERE session_id=? AND product_id NOT IN (SELECT product_id FROM cart WHERE user_id=?)")
+    $pdo->prepare("UPDATE cart SET user_id=?, session_id=NULL WHERE session_id=? AND product_id NOT IN (SELECT p FROM (SELECT product_id AS p FROM cart WHERE user_id=?) AS tmp)")
         ->execute([$user['id'], cartKey(), $user['id']]);
     $pdo->prepare("DELETE FROM cart WHERE session_id=?")->execute([cartKey()]);
     flashMessage('success', 'Welcome back, ' . explode(' ',$user['name'])[0] . '! 💎');
