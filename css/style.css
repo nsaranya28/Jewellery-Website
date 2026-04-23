@@ -221,18 +221,35 @@ input, select, textarea { font-family: var(--font-sans); }
 .dropdown-menu a:hover { background: var(--gold-pale); color: var(--gold-dark); }
 
 /* ── FLASH MESSAGE ───────────────────────────────────────────── */
-.flash-container { position: relative; z-index: 200; }
+.flash-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
 .flash {
+  pointer-events: auto;
   padding: 14px 20px;
   font-size: 14px;
   font-weight: 500;
-  text-align: center;
-  animation: slideDown 0.4s ease;
+  text-align: left;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  animation: slideLeft 0.4s ease;
+  min-width: 250px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.flash-success { background: #d4edda; color: #155724; border-bottom: 2px solid #27ae60; }
-.flash-error   { background: #f8d7da; color: #721c24; border-bottom: 2px solid #e74c3c; }
-.flash-info    { background: var(--gold-pale); color: var(--gold-dark); border-bottom: 2px solid var(--gold); }
-@keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+.flash-success { color: var(--dark); border-left: 4px solid var(--green); border-bottom: none; }
+.flash-error   { color: var(--dark); border-left: 4px solid var(--red); border-bottom: none; }
+.flash-info    { color: var(--dark); border-left: 4px solid var(--gold); border-bottom: none; }
+@keyframes slideLeft { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:translateX(0); } }
 
 /* ── HERO ────────────────────────────────────────────────────── */
 .hero {

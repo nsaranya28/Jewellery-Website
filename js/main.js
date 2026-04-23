@@ -11,7 +11,7 @@ window.showToast = function (msg, type = 'success') {
     container.appendChild(toast);
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(-10px)';
+        toast.style.transform = 'translateX(30px)';
         toast.style.transition = '0.4s ease';
         setTimeout(() => toast.remove(), 400);
     }, 4000);
@@ -42,6 +42,16 @@ const handleHeaderScroll = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Auto-dismiss server-rendered flash messages
+    document.querySelectorAll('.flash-container .flash').forEach(toast => {
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(30px)';
+            toast.style.transition = '0.4s ease';
+            setTimeout(() => toast.remove(), 400);
+        }, 4000);
+    });
+
     // Initialize Reveal Elements
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     
