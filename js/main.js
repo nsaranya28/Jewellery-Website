@@ -1,22 +1,6 @@
 // main.js — Jewels.com Premium Interactive Logic
 const SITE_URL = '/jewellery'; // Fallback base URL for AJAX
 
-// ── TOAST NOTIFICATION ──
-window.showToast = function (msg, type = 'success') {
-    const container = document.querySelector('.flash-container');
-    const toast = document.createElement('div');
-    toast.className = `flash flash-${type} glass`;
-    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
-    toast.innerHTML = `${icon} ${msg}`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(30px)';
-        toast.style.transition = '0.4s ease';
-        setTimeout(() => toast.remove(), 400);
-    }, 4000);
-};
-
 // ── REVEAL ON SCROLL ──
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -42,16 +26,6 @@ const handleHeaderScroll = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Auto-dismiss server-rendered flash messages
-    document.querySelectorAll('.flash-container .flash').forEach(toast => {
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(30px)';
-            toast.style.transition = '0.4s ease';
-            setTimeout(() => toast.remove(), 400);
-        }, 4000);
-    });
-
     // Initialize Reveal Elements
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     

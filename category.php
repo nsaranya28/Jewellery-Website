@@ -50,7 +50,7 @@ include 'includes/header.php';
 
 <section class="section">
   <div class="container">
-    <?php if ($cat['description']): ?>
+    <?php if (!empty($cat['description'])): ?>
     <p style="color:var(--gray);font-size:15px;max-width:700px;margin-bottom:32px;line-height:1.8;"><?= safeHtml($cat['description']) ?></p>
     <?php endif; ?>
 

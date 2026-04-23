@@ -99,7 +99,13 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
   </nav>
 </header>
 
-<!-- Flash Message -->
-<div class="flash-container"><?php showFlash(); ?></div>
+<!-- React Toast Container -->
+<div id="react-toast-root"></div>
+<?php if (!empty($_SESSION['flash'])): ?>
+<script>
+  window.SERVER_FLASH = <?= json_encode($_SESSION['flash']) ?>;
+  <?php unset($_SESSION['flash']); ?>
+</script>
+<?php endif; ?>
 
 <main>
