@@ -178,9 +178,9 @@ function openOtpModal() {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        alert(data.message + '\n\nSimulated SMS Delivery:\nOTP: ' + data.dev_otp);
+        showToast('📱 SMS: OTP is ' + data.dev_otp, 'success');
       } else {
-        alert(data.message);
+        showToast(data.message, 'error');
         closeOtpModal();
       }
     });
@@ -194,7 +194,7 @@ function closeOtpModal() {
 pVerifyBtn.addEventListener('click', function() {
   const otpVal = pOtpInput.value.trim();
   if (otpVal.length !== 6) {
-    alert("Please enter a valid 6-digit OTP.");
+    showToast("Please enter a valid 6-digit OTP.", "error");
     return;
   }
   
@@ -215,7 +215,7 @@ pVerifyBtn.addEventListener('click', function() {
         pform.submit();
       }, 1000);
     } else {
-      alert(data.message);
+      showToast(data.message, "error");
       pVerifyBtn.innerHTML = '<i class="fas fa-lock"></i> Verify & Pay securely';
       pVerifyBtn.disabled = false;
       pVerifyBtn.style.background = 'var(--gold)';

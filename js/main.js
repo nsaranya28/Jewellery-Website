@@ -78,15 +78,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // AJAX Add to Cart
     document.querySelectorAll('.quick-cart').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
             const pid = btn.dataset.id;
+            if (!pid) return;
+
+            // Find quantity if in a form
+            let qty = 1;
+            const form = btn.closest('form');
+            if (form) {
+                const qtyInput = form.querySelector('input[name="quantity"]');
+                if (qtyInput) qty = parseInt(qtyInput.value) || 1;
+            }
+
             const originalHtml = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
+
             try {
                 const res = await fetch('ajax/cart.php', {
                     method: 'POST',
-                    body: JSON.stringify({ product_id: pid, quantity: 1 }),
+                    body: JSON.stringify({ product_id: pid, quantity: qty }),
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await res.json();

@@ -163,7 +163,7 @@ include 'includes/header.php';
             <input type="hidden" name="quantity" value="1"/>
           </div>
           <div class="detail-actions">
-            <button type="submit" name="add_cart" class="btn btn-cart btn-gold"><i class="fas fa-shopping-bag"></i> Add to Cart</button>
+            <button type="submit" name="add_cart" class="btn btn-cart btn-gold quick-cart" data-id="<?= $p['id'] ?>"><i class="fas fa-shopping-bag"></i> Add to Cart</button>
             <button type="submit" name="add_cart" value="1" onclick="this.form.querySelector('[name=buy_now]').value='1'" class="btn btn-outline" style="color:var(--dark);border-color:var(--gold-dark);">
               <i class="fas fa-bolt"></i> Buy Now
             </button>
