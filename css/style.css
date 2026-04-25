@@ -991,23 +991,68 @@ input, select, textarea { font-family: var(--font-sans); }
 .track-step.done .track-title { color: var(--gold-dark); }
 
 /* ── PAYMENT PAGE ────────────────────────────────────────────── */
-.payment-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0; }
+.payment-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 28px 0;
+}
 .payment-option {
   border: 2px solid var(--gray-light);
-  border-radius: var(--radius-md);
-  padding: 20px;
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
   text-align: center;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
 }
-.payment-option:hover, .payment-option.selected {
+.payment-option::after {
+  content: '\f058';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--gold);
+  font-size: 18px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+.payment-option:hover {
+  border-color: var(--gold-pale);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.payment-option.selected {
   border-color: var(--gold);
   background: var(--gold-pale);
-  box-shadow: var(--shadow-gold);
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
 }
-.payment-option .po-icon { font-size: 32px; margin-bottom: 8px; }
-.payment-option .po-name { font-weight: 600; font-size: 15px; color: var(--dark); }
-.payment-option .po-desc { font-size: 11px; color: var(--gray); margin-top: 3px; }
+.payment-option.selected::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.payment-option .po-icon { 
+  font-size: 36px; 
+  margin-bottom: 12px; 
+  color: var(--gold-dark);
+  transition: transform 0.3s ease;
+}
+.payment-option:hover .po-icon {
+  transform: scale(1.1);
+}
+.payment-option .po-name { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 4px; }
+.payment-option .po-desc { font-size: 11px; color: var(--gray); line-height: 1.4; }
+
+@media (max-width: 600px) {
+  .payment-options { grid-template-columns: 1fr; }
+  .payment-option { display: flex; align-items: center; text-align: left; padding: 16px; gap: 16px; }
+  .payment-option .po-icon { margin-bottom: 0; font-size: 28px; }
+  .payment-option .po-name { font-size: 14px; }
+}
 
 /* ── SUCCESS PAGE ────────────────────────────────────────────── */
 .success-card {

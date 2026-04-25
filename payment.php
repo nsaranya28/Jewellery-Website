@@ -79,26 +79,21 @@ include 'includes/header.php';
       <h2 style="font-family:var(--font-serif);font-size:24px;color:var(--dark);margin-bottom:20px;">Choose Payment Method</h2>
 
       <form method="POST" id="payment-form">
-        <input type="hidden" name="payment_method" id="paymentMethod" value="COD"/>
+        <input type="hidden" name="payment_method" id="paymentMethod" value="Card"/>
 
         <div class="payment-options">
-          <div class="payment-option selected" data-method="GPay" onclick="selectPay(this)">
-            <div class="po-icon">📱</div>
-            <div class="po-name">Google Pay</div>
-            <div class="po-desc">Pay via UPI — GPay</div>
-          </div>
-          <div class="payment-option" data-method="PhonePe" onclick="selectPay(this)">
-            <div class="po-icon">📲</div>
-            <div class="po-name">PhonePe</div>
-            <div class="po-desc">Pay via PhonePe UPI</div>
+          <div class="payment-option selected" data-method="Card" onclick="selectPay(this)">
+            <div class="po-icon"><i class="fas fa-credit-card"></i></div>
+            <div class="po-name">Credit / Debit Card</div>
+            <div class="po-desc">Visa, Mastercard, RuPay</div>
           </div>
           <div class="payment-option" data-method="UPI" onclick="selectPay(this)">
-            <div class="po-icon">💸</div>
-            <div class="po-name">Other UPI</div>
-            <div class="po-desc">Any UPI app</div>
+            <div class="po-icon"><i class="fas fa-mobile-screen"></i></div>
+            <div class="po-name">UPI Payment</div>
+            <div class="po-desc">GPay, PhonePe, Paytm</div>
           </div>
           <div class="payment-option" data-method="COD" onclick="selectPay(this)">
-            <div class="po-icon">💵</div>
+            <div class="po-icon"><i class="fas fa-hand-holding-dollar"></i></div>
             <div class="po-name">Cash on Delivery</div>
             <div class="po-desc">Pay when delivered</div>
           </div>
@@ -122,21 +117,6 @@ include 'includes/header.php';
   </div>
 </section>
 
-<!-- Payment Authentication Modal -->
-<div id="otpModalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;backdrop-filter:blur(5px);align-items:center;justify-content:center;">
-  <div style="background:var(--white);padding:30px;border-radius:16px;width:90%;max-width:400px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;">
-    <button type="button" onclick="closeOtpModal()" style="position:absolute;top:15px;right:15px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray);">&times;</button>
-    <div id="providerIcon" style="width:60px;height:60px;background:var(--ivory);border:2px solid var(--gold-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:24px;">
-    </div>
-    <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--dark);margin-bottom:8px;">Authenticate Payment</h3>
-    <p style="font-size:14px;color:var(--gray);margin-bottom:20px;">We've sent a secure 6-digit OTP to your registered phone number to link your account.</p>
-    
-    <input type="text" id="verifyOtpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="width:100%;padding:14px;border:2px solid var(--gray-light);border-radius:8px;font-size:18px;text-align:center;letter-spacing:4px;font-weight:600;margin-bottom:15px;outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--gray-light)'">
-    
-    <button type="button" id="btnVerifyOtp" class="btn btn-gold btn-full" style="padding:14px;font-size:16px;"><i class="fas fa-lock"></i> Verify & Pay securely</button>
-  </div>
-</div>
-
 <script>
 function selectPay(el) {
   document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
@@ -145,83 +125,6 @@ function selectPay(el) {
 }
 // Start first selected
 document.querySelector('.payment-option.selected')?.click();
-
-// OTP Flow
-const pform = document.getElementById('payment-form');
-const methodInput = document.getElementById('paymentMethod');
-const pOverlay = document.getElementById('otpModalOverlay');
-const pVerifyBtn = document.getElementById('btnVerifyOtp');
-const pOtpInput = document.getElementById('verifyOtpInput');
-
-pform.addEventListener('submit', function(e) {
-  if (methodInput.value === 'GPay' || methodInput.value === 'PhonePe' || methodInput.value === 'UPI') {
-    e.preventDefault();
-    
-    // Set dynamic icon based on method
-    const iconWrapper = document.getElementById('providerIcon');
-    if(methodInput.value === 'GPay') {
-        iconWrapper.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="GPay" style="width:30px;">';
-    } else if(methodInput.value === 'PhonePe') {
-        iconWrapper.innerHTML = '📲';
-    } else {
-        iconWrapper.innerHTML = '💸';
-    }
-    
-    openOtpModal();
-  }
-});
-
-function openOtpModal() {
-  pOverlay.style.display = 'flex';
-  
-  fetch('ajax/send-payment-otp.php', { method: 'POST' })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        showToast('📱 SMS: OTP is ' + data.dev_otp, 'success');
-      } else {
-        showToast(data.message, 'error');
-        closeOtpModal();
-      }
-    });
-}
-
-function closeOtpModal() {
-  pOverlay.style.display = 'none';
-  pOtpInput.value = '';
-}
-
-pVerifyBtn.addEventListener('click', function() {
-  const otpVal = pOtpInput.value.trim();
-  if (otpVal.length !== 6) {
-    showToast("Please enter a valid 6-digit OTP.", "error");
-    return;
-  }
-  
-  pVerifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Linking Bank...';
-  pVerifyBtn.disabled = true;
-  pVerifyBtn.style.background = 'var(--gray)';
-  
-  const fd = new FormData();
-  fd.append('otp', otpVal);
-  
-  fetch('ajax/verify-payment-otp.php', { method: 'POST', body: fd })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      pVerifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Complete! Redirecting...';
-      pVerifyBtn.style.background = 'var(--green)';
-      setTimeout(() => {
-        pform.submit();
-      }, 1000);
-    } else {
-      showToast(data.message, "error");
-      pVerifyBtn.innerHTML = '<i class="fas fa-lock"></i> Verify & Pay securely';
-      pVerifyBtn.disabled = false;
-      pVerifyBtn.style.background = 'var(--gold)';
-    }
-  });
-});
 </script>
 
 <?php include 'includes/footer.php'; ?>

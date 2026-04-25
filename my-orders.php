@@ -90,7 +90,13 @@ include 'includes/header.php';
 
             <div class="order-footer-new">
               <div style="font-size:12px;color:var(--gray);">
-                <i class="fas fa-credit-card"></i> Paid via <?= safeHtml($order['payment_method']) ?>
+                <?php if($order['payment_method'] === 'COD'): ?>
+                  <i class="fas fa-hand-holding-dollar"></i> Paid via Cash on Delivery
+                <?php elseif($order['payment_method'] === 'UPI'): ?>
+                  <i class="fas fa-mobile-screen"></i> Paid via UPI Payment
+                <?php else: ?>
+                  <i class="fas fa-credit-card"></i> Paid via <?= safeHtml($order['payment_method']) ?>
+                <?php endif; ?>
               </div>
               <div style="display:flex;gap:10px;">
                 <a href="invoice.php?order=<?= $order['id'] ?>" class="btn btn-sm btn-outline"><i class="fas fa-file-invoice"></i> Invoice</a>
