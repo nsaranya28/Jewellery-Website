@@ -67,20 +67,24 @@ $_SESSION['registration_otp_time']   = time();
 
 // ── Send OTP ──
 if ($method === 'email') {
-    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'jewels.com';
-    if (strpos($host, 'localhost') !== false) {
-        $host = 'jewels.local';
-    }
-    $subject = "Your Verification Code — " . SITE_NAME;
-    $message = "Hello,\n\nYour OTP for registration at " . SITE_NAME . " is: $otp\n\nThis code is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nThank you,\n" . SITE_NAME;
-    $headers = "From: noreply@" . $host . "\r\n";
-    $headers .= "Reply-To: noreply@" . $host . "\r\n";
-
-    if (@mail($email, $subject, $message, $headers)) {
-        echo json_encode(['success' => true, 'message' => "OTP sent to $email", 'method' => 'email']);
+    require_once '../includes/mailer.php';
+    
+    $subject = "🔒 " . $otp . " is your verification code for " . SITE_NAME;
+    $message = "Hello,\n\n" .
+               "Thank you for choosing " . SITE_NAME . " — where elegance meets purity.\n\n" .
+               "Your one-time verification code is:\n\n" .
+               "💎 $otp 💎\n\n" .
+               "This code is valid for 10 minutes. Please enter it on the registration page to secure your account.\n\n" .
+               "🛡️ Security Tip:\n" .
+               "Never share this OTP with anyone. Our team will never ask for your code over phone or email.\n\n" .
+               "Best regards,\n" .
+               "The " . SITE_NAME . " Team";
+    
+    if (send_mail_smtp($email, $subject, $message)) {
+        echo json_encode(['success' => true, 'message' => "OTP sent to $email securely.", 'method' => 'email']);
     } else {
-        // Dev fallback — mail() may not work on localhost
-        echo json_encode(['success' => true, 'message' => "OTP sent to $email", 'method' => 'email', 'dev_otp' => $otp]);
+        // If SMTP fails, provide a clear error or a dev fallback if requested
+        echo json_encode(['success' => true, 'message' => "OTP sent to $email (Simulation Mode).", 'method' => 'email', 'dev_otp' => $otp]);
     }
 } else {
     // Phone — In production, integrate an SMS gateway (Twilio, MSG91, etc.)

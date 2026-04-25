@@ -39,6 +39,13 @@ include 'includes/header.php';
         <p>Login to your Jewels.com account</p>
       </div>
 
+      <button type="button" class="btn btn-google btn-full" style="margin-bottom:20px;" onclick="continueWithGoogle()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" style="width:18px;margin-right:10px;vertical-align:middle;">
+        Continue with Google
+      </button>
+
+      <div class="form-divider"><span>or login with email</span></div>
+
       <form method="POST">
         <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="you@email.com" required value="<?= safeHtml($_POST['email'] ?? '') ?>"/></div>
         <div class="form-group"><label>Password</label><input type="password" name="password" placeholder="Your password" required/></div>
@@ -49,10 +56,41 @@ include 'includes/header.php';
         <strong>Demo Login:</strong> priya@gmail.com / user123
       </div>
 
-      <div class="form-divider">or</div>
-      <div class="form-link">New to Jewels.com? <a href="register.php">Create an account</a></div>
+        <div class="form-link">New to Jewels.com? <a href="register.php">Create an account</a></div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+/* ── Google Button Style ── */
+.btn-google {
+  background: #fff;
+  color: #757575;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.btn-google:hover {
+  background: #f8f8f8;
+  border-color: #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+</style>
+
+<script>
+function continueWithGoogle() {
+  showToast('Connecting to Google...', 'info');
+  setTimeout(() => {
+    // Mock Google Login Logic
+    alert('Simulating Google Login... In production, this would open a Google OAuth popup.');
+    window.location.href = 'index.php'; // Redirect on success
+  }, 1000);
+}
+</script>
 
 <?php include 'includes/footer.php'; ?>

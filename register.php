@@ -103,6 +103,12 @@ include 'includes/header.php';
 
       <!-- ══════ STEP 1: User Details ══════ -->
       <div class="reg-panel active" id="panelDetails">
+        <button type="button" class="btn btn-google btn-full" style="margin-bottom:20px;" onclick="continueWithGoogle()">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" style="width:18px;margin-right:10px;vertical-align:middle;">
+          Continue with Google
+        </button>
+        <div class="form-divider"><span>or register manually</span></div>
+
         <div class="form-row">
           <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name" required/></div>
           <div class="form-group"><label>Phone</label><input type="tel" id="regPhone" placeholder="10-digit mobile" maxlength="10"/></div>
@@ -136,7 +142,13 @@ include 'includes/header.php';
       <!-- ══════ STEP 2: OTP Verification ══════ -->
       <div class="reg-panel" id="panelOtp">
         <div style="text-align:center;margin-bottom:20px;">
-          <div style="font-size:48px;margin-bottom:8px;" id="otpIcon">📧</div>
+          <div id="otpIconWrapper" style="width:80px;height:80px;background:var(--ivory-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:40px;position:relative;border:2px solid var(--gold-pale);">
+            <span id="otpIcon">📧</span>
+            <div id="gmailBadge" style="display:none;position:absolute;bottom:-5px;right:-5px;background:#fff;border-radius:50%;padding:4px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" style="width:16px;">
+            </div>
+          </div>
+          <h3 id="otpHeader">Verify Email</h3>
           <p style="font-size:14px;color:#666;" id="otpSentMsg">OTP sent to your email</p>
         </div>
 
@@ -185,11 +197,57 @@ include 'includes/header.php';
         </div>
       </div>
 
-      <div class="form-divider">or</div>
-      <div class="form-link">Already have an account? <a href="login.php">Login here</a></div>
+        <div class="form-link">Already have an account? <a href="login.php">Login here</a></div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+/* ── Google Button Style ── */
+.btn-google {
+  background: #fff;
+  color: #757575;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.btn-google:hover {
+  background: #f8f8f8;
+  border-color: #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+</style>
+
+<script>
+function continueWithGoogle() {
+  showToast('Connecting to Google...', 'info');
+  setTimeout(() => {
+    // Mock Google Login Popup / Logic
+    if (confirm('Verify with Google: jewellryshop@gmail.com?')) {
+      showToast('Google Account Verified!', 'success');
+      setStep(3);
+      // Mock data from Google
+      document.getElementById('regName').value = "Google User";
+      document.getElementById('regEmail').value = "jewellryshop@gmail.com";
+      document.getElementById('regPass').value = "google_auth_placeholder";
+      document.getElementById('regConfirm').value = "google_auth_placeholder";
+      
+      // Auto-submit
+      document.getElementById('fName').value = "Google User";
+      document.getElementById('fEmail').value = "jewellryshop@gmail.com";
+      document.getElementById('fPhone').value = "";
+      document.getElementById('fPass').value = "google_auth_placeholder";
+      document.getElementById('fConfirm').value = "google_auth_placeholder";
+      setTimeout(() => document.getElementById('finalRegForm').submit(), 1200);
+    }
+  }, 1000);
+}
+</script>
 
 <script>
 let selectedMethod = 'email';
@@ -254,8 +312,14 @@ async function sendOtp() {
     if (data.success) {
       showToast(data.message, 'success');
       // Update OTP panel UI
+      const emailVal = document.getElementById('regEmail').value.trim();
+      const isGmail = emailVal.toLowerCase().endsWith('@gmail.com');
+      
       document.getElementById('otpIcon').textContent = selectedMethod==='email' ? '📧' : '📱';
+      document.getElementById('otpHeader').textContent = selectedMethod==='email' ? 'Verify Email' : 'Verify Phone';
       document.getElementById('otpSentMsg').textContent = data.message;
+      document.getElementById('gmailBadge').style.display = (selectedMethod==='email' && isGmail) ? 'block' : 'none';
+
       // Dev OTP hint
       if (data.dev_otp) {
         document.getElementById('devOtpBox').style.display = 'block';

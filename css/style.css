@@ -1047,6 +1047,41 @@ input, select, textarea { font-family: var(--font-sans); }
 .payment-option .po-name { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 4px; }
 .payment-option .po-desc { font-size: 11px; color: var(--gray); line-height: 1.4; }
 
+/* ── FORM UTILITIES ──────────────────────────────────────────── */
+.form-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0;
+  color: var(--gray);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.form-divider::before, .form-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--gray-light);
+}
+.form-divider span {
+  padding: 0 15px;
+}
+.form-link {
+  text-align: center;
+  font-size: 14px;
+  color: var(--gray);
+}
+.form-link a {
+  color: var(--gold-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color var(--transition);
+}
+.form-link a:hover {
+  color: var(--gold);
+}
+
 /* ── PAYMENT DETAILS FORM ────────────────────────────────────── */
 #payment-details-container {
   background: var(--ivory);
