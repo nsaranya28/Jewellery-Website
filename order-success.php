@@ -27,6 +27,7 @@ include 'includes/header.php';
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
         <a href="order-tracking.php?order=<?= $order['id'] ?>" class="btn btn-gold"><i class="fas fa-truck"></i> Track Order</a>
+        <a href="invoice.php?order=<?= $order['id'] ?>" class="btn btn-outline" style="color:var(--dark);border-color:var(--gold-dark);"><i class="fas fa-file-download"></i> Download Receipt</a>
         <a href="my-orders.php" class="btn btn-outline" style="color:var(--dark);border-color:var(--gold-dark);"><i class="fas fa-list"></i> My Orders</a>
       </div>
       <a href="index.php" style="display:block;font-size:13px;color:var(--gray);margin-top:16px;">← Continue Shopping</a>
