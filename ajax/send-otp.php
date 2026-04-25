@@ -80,11 +80,12 @@ if ($method === 'email') {
                "Best regards,\n" .
                "The " . SITE_NAME . " Team";
     
-    if (send_mail_smtp($email, $subject, $message)) {
+    $mailRes = send_mail_smtp($email, $subject, $message);
+    if ($mailRes === true) {
         echo json_encode(['success' => true, 'message' => "OTP sent to $email securely.", 'method' => 'email']);
     } else {
-        // If SMTP fails, provide a clear error or a dev fallback if requested
-        echo json_encode(['success' => true, 'message' => "OTP sent to $email (Simulation Mode).", 'method' => 'email', 'dev_otp' => $otp]);
+        // If SMTP fails, provide the specific error for debugging
+        echo json_encode(['success' => true, 'message' => "OTP sent to $email (Simulation Mode).", 'method' => 'email', 'dev_otp' => $otp, 'smtp_error' => $mailRes]);
     }
 } else {
     // Phone — In production, integrate an SMS gateway (Twilio, MSG91, etc.)

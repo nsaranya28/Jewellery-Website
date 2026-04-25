@@ -310,7 +310,9 @@ async function sendOtp() {
     const res = await fetch('ajax/send-otp.php', { method:'POST', body:fd });
     const data = await res.json();
     if (data.success) {
-      showToast(data.message, 'success');
+      if (data.smtp_error) console.error("SMTP Error:", data.smtp_error);
+      showToast(data.message, data.smtp_error ? 'info' : 'success');
+
       // Update OTP panel UI
       const emailVal = document.getElementById('regEmail').value.trim();
       const isGmail = emailVal.toLowerCase().endsWith('@gmail.com');
