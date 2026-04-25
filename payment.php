@@ -99,7 +99,45 @@ include 'includes/header.php';
           </div>
         </div>
 
-        <div style="border-top:2px solid var(--gold-pale);padding-top:20px;margin-top:10px;">
+        <div id="payment-details-container" style="margin-top: 20px; display: none;">
+          <!-- Card Details -->
+          <div id="details-Card" class="pay-detail-group" style="display: none;">
+            <h4 style="font-size: 14px; color: var(--dark); margin-bottom: 12px; font-weight: 600;">💳 Card Information</h4>
+            <div class="form-group">
+              <label>Card Number</label>
+              <input type="text" id="card_number" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" class="form-control">
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Card Holder Name</label>
+                <input type="text" id="card_name" name="card_name" placeholder="Full Name" class="form-control">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label>Expiry</label>
+                <input type="text" id="card_expiry" name="card_expiry" placeholder="MM/YY" maxlength="5" class="form-control">
+              </div>
+              <div class="form-group" style="flex: 0.8;">
+                <label>CVV</label>
+                <input type="password" id="card_cvv" name="card_cvv" placeholder="***" maxlength="3" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <!-- UPI Details -->
+          <div id="details-UPI" class="pay-detail-group" style="display: none;">
+            <h4 style="font-size: 14px; color: var(--dark); margin-bottom: 12px; font-weight: 600;">📱 UPI Details</h4>
+            <div class="form-group">
+              <label>UPI ID (VPA)</label>
+              <input type="text" id="upi_id" name="upi_id" placeholder="username@bank" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Account Holder Name</label>
+              <input type="text" id="upi_name" name="upi_name" placeholder="Name linked to UPI" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div style="border-top:2px solid var(--gold-pale);padding-top:20px;margin-top:20px;">
           <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span>Subtotal</span><span><?= money($co['subtotal']) ?></span></div>
           <?php if ($co['discount']): ?><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--green);margin-bottom:8px;"><span>Discount</span><span>−<?= money($co['discount']) ?></span></div><?php endif; ?>
           <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span>Shipping</span><span><?= $co['shipping'] ? money($co['shipping']) : 'Free' ?></span></div>
@@ -119,12 +157,67 @@ include 'includes/header.php';
 
 <script>
 function selectPay(el) {
+  const method = el.dataset.method;
   document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
-  document.getElementById('paymentMethod').value = el.dataset.method;
+  document.getElementById('paymentMethod').value = method;
+
+  // Show/Hide details
+  const detailsContainer = document.getElementById('payment-details-container');
+  const allDetails = document.querySelectorAll('.pay-detail-group');
+  
+  allDetails.forEach(d => d.style.display = 'none');
+  
+  if (method === 'Card' || method === 'UPI') {
+    detailsContainer.style.display = 'block';
+    document.getElementById('details-' + method).style.display = 'block';
+  } else {
+    detailsContainer.style.display = 'none';
+  }
 }
+
 // Start first selected
 document.querySelector('.payment-option.selected')?.click();
+
+// Form Validation
+document.getElementById('payment-form').addEventListener('submit', function(e) {
+  const method = document.getElementById('paymentMethod').value;
+  
+  if (method === 'Card') {
+    const num = document.getElementById('card_number').value.trim();
+    const name = document.getElementById('card_name').value.trim();
+    const exp = document.getElementById('card_expiry').value.trim();
+    const cvv = document.getElementById('card_cvv').value.trim();
+    
+    if (!num || !name || !exp || !cvv) {
+      e.preventDefault();
+      showToast("Please fill in all card details.", "error");
+      return;
+    }
+  } else if (method === 'UPI') {
+    const upiId = document.getElementById('upi_id').value.trim();
+    const upiName = document.getElementById('upi_name').value.trim();
+    
+    if (!upiId || !upiName) {
+      e.preventDefault();
+      showToast("Please fill in all UPI details.", "error");
+      return;
+    }
+    if (!upiId.includes('@')) {
+      e.preventDefault();
+      showToast("Please enter a valid UPI ID.", "error");
+      return;
+    }
+  }
+});
+
+// Input formatting for card
+document.getElementById('card_number')?.addEventListener('input', function(e) {
+  this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+});
+document.getElementById('card_expiry')?.addEventListener('input', function(e) {
+  this.value = this.value.replace(/\D/g, '').replace(/(.{2})/, '$1/').substring(0, 5);
+});
 </script>
 
 <?php include 'includes/footer.php'; ?>

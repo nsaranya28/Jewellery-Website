@@ -1047,11 +1047,43 @@ input, select, textarea { font-family: var(--font-sans); }
 .payment-option .po-name { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 4px; }
 .payment-option .po-desc { font-size: 11px; color: var(--gray); line-height: 1.4; }
 
+/* ── PAYMENT DETAILS FORM ────────────────────────────────────── */
+#payment-details-container {
+  background: var(--ivory);
+  border: 1px solid var(--gold-pale);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  animation: slideDown 0.4s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pay-detail-group h4 { margin-bottom: 15px; border-bottom: 1px solid var(--gold-pale); padding-bottom: 8px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gray); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: var(--white);
+}
+.form-control:focus {
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 0 4px var(--gold-pale);
+}
+.form-row { display: flex; gap: 12px; }
+
 @media (max-width: 600px) {
   .payment-options { grid-template-columns: 1fr; }
   .payment-option { display: flex; align-items: center; text-align: left; padding: 16px; gap: 16px; }
   .payment-option .po-icon { margin-bottom: 0; font-size: 28px; }
   .payment-option .po-name { font-size: 14px; }
+  .form-row { flex-direction: column; gap: 0; }
 }
 
 /* ── SUCCESS PAGE ────────────────────────────────────────────── */
