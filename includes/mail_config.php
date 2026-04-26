@@ -15,7 +15,7 @@ define('SMTP_USER', 'nsaranya282@gmail.com');
  * 3. Create a new App Password for "Mail" and "Other (Custom name: Jewels Website)".
  * 4. Paste the 16-character code below.
  */
-define('SMTP_PASS', ''); 
+define('SMTP_PASS', 'ecdl webe gacd oyti'); 
 
 define('SMTP_FROM', 'nsaranya282@gmail.com');
 define('SMTP_NAME', 'Jewels.com Support');

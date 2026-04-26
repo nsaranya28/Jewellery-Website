@@ -11,7 +11,7 @@ class PHPMailerLite {
     private $from;
     private $fromName;
 
-    private $lastError;
+    private $log = [];
 
     public function __construct($host, $port, $user, $pass, $from, $fromName) {
         $this->host = $host;
@@ -23,41 +23,45 @@ class PHPMailerLite {
     }
 
     public function getLastError() {
-        return $this->lastError;
+        return $this->lastError . "\n\nSMTP Log:\n" . implode("", $this->log);
     }
 
     public function send($to, $subject, $message) {
+        $this->log = [];
         try {
             if (!extension_loaded('openssl')) {
-                $this->lastError = "PHP OpenSSL extension is not enabled. Please enable it in php.ini.";
+                $this->lastError = "PHP OpenSSL extension is not enabled.";
                 return false;
             }
 
-            // Determine protocol based on port
-            // Port 465 is usually implicit SSL
-            // Port 587 is usually STARTTLS (requires tcp:// and then STARTTLS command)
-            // For now, we support implicit SSL on both if specified, but default to ssl:// for 465.
             $prefix = ($this->port == 465) ? 'ssl://' : '';
-            
             $socket = @fsockopen($prefix . $this->host, $this->port, $errno, $errstr, 15);
             if (!$socket) {
-                $this->lastError = "Connection failed: $errstr ($errno) at {$prefix}{$this->host}:{$this->port}";
+                $this->lastError = "Connection failed: $errstr ($errno)";
                 return false;
             }
 
-            $this->getResponse($socket);
+            $this->log[] = "S: " . $this->getResponse($socket);
             $helloHost = $_SERVER['HTTP_HOST'] ?? gethostname() ?? 'localhost';
+            $this->log[] = "C: EHLO $helloHost\n";
             fwrite($socket, "EHLO " . $helloHost . "\r\n");
-            $this->getResponse($socket);
+            $this->log[] = "S: " . $this->getResponse($socket);
 
+            $this->log[] = "C: AUTH LOGIN\n";
             fwrite($socket, "AUTH LOGIN\r\n");
-            $this->getResponse($socket);
+            $this->log[] = "S: " . $this->getResponse($socket);
+            
+            $this->log[] = "C: [USER]\n";
             fwrite($socket, base64_encode($this->user) . "\r\n");
-            $this->getResponse($socket);
-            fwrite($socket, base64_encode($this->pass) . "\r\n");
+            $this->log[] = "S: " . $this->getResponse($socket);
+            
+            $this->log[] = "C: [PASS]\n";
+            fwrite($socket, base64_encode(str_replace(' ', '', $this->pass)) . "\r\n");
             $res = $this->getResponse($socket);
+            $this->log[] = "S: " . $res;
+            
             if (strpos($res, '235') === false) {
-                $this->lastError = "Authentication failed: " . trim($res);
+                $this->lastError = "Authentication failed.";
                 return false;
             }
 
@@ -65,20 +69,15 @@ class PHPMailerLite {
             $this->getResponse($socket);
             fwrite($socket, "RCPT TO: <{$to}>\r\n");
             $this->getResponse($socket);
-
             fwrite($socket, "DATA\r\n");
             $this->getResponse($socket);
 
-            $headers = "MIME-Version: 1.0\r\n";
-            $headers .= "Content-type: text/plain; charset=utf-8\r\n";
-            $headers .= "To: <{$to}>\r\n";
-            $headers .= "From: {$this->fromName} <{$this->from}>\r\n";
-            $headers .= "Subject: {$subject}\r\n";
-            $headers .= "Date: " . date('r') . "\r\n";
+            $headers = "MIME-Version: 1.0\r\nContent-type: text/plain; charset=utf-8\r\n";
+            $headers .= "To: <{$to}>\r\nFrom: {$this->fromName} <{$this->from}>\r\n";
+            $headers .= "Subject: {$subject}\r\nDate: " . date('r') . "\r\n";
 
             fwrite($socket, $headers . "\r\n" . $message . "\r\n.\r\n");
             $this->getResponse($socket);
-
             fwrite($socket, "QUIT\r\n");
             fclose($socket);
             return true;
