@@ -11,7 +11,7 @@ function send_mail_smtp($to, $subject, $message) {
 
     $mailer = new PHPMailerLite(
         SMTP_HOST,
-        465,
+        SMTP_PORT,
         SMTP_USER,
         SMTP_PASS,
         SMTP_FROM,

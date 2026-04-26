@@ -33,14 +33,21 @@ class PHPMailerLite {
                 return false;
             }
 
-            $socket = @fsockopen('ssl://' . $this->host, 465, $errno, $errstr, 15);
+            // Determine protocol based on port
+            // Port 465 is usually implicit SSL
+            // Port 587 is usually STARTTLS (requires tcp:// and then STARTTLS command)
+            // For now, we support implicit SSL on both if specified, but default to ssl:// for 465.
+            $prefix = ($this->port == 465) ? 'ssl://' : '';
+            
+            $socket = @fsockopen($prefix . $this->host, $this->port, $errno, $errstr, 15);
             if (!$socket) {
-                $this->lastError = "Connection failed: $errstr ($errno)";
+                $this->lastError = "Connection failed: $errstr ($errno) at {$prefix}{$this->host}:{$this->port}";
                 return false;
             }
 
             $this->getResponse($socket);
-            fwrite($socket, "EHLO " . $_SERVER['HTTP_HOST'] . "\r\n");
+            $helloHost = $_SERVER['HTTP_HOST'] ?? gethostname() ?? 'localhost';
+            fwrite($socket, "EHLO " . $helloHost . "\r\n");
             $this->getResponse($socket);
 
             fwrite($socket, "AUTH LOGIN\r\n");
@@ -50,7 +57,7 @@ class PHPMailerLite {
             fwrite($socket, base64_encode($this->pass) . "\r\n");
             $res = $this->getResponse($socket);
             if (strpos($res, '235') === false) {
-                $this->lastError = "Authentication failed: " . $res;
+                $this->lastError = "Authentication failed: " . trim($res);
                 return false;
             }
 
