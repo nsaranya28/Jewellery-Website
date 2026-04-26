@@ -6,7 +6,7 @@
 
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 465); // Use 465 for SSL (Recommended for PHPMailerLite)
-define('SMTP_USER', 'nsaranya282@gmail.com');
+define('SMTP_USER', 'saranya02022005@gmail.com');
 
 /**
  * !!! IMPORTANT: Gmail App Password Required !!!
@@ -17,5 +17,5 @@ define('SMTP_USER', 'nsaranya282@gmail.com');
  */
 define('SMTP_PASS', 'ecdl webe gacd oyti'); 
 
-define('SMTP_FROM', 'nsaranya282@gmail.com');
+define('SMTP_FROM', 'saranya02022005@gmail.com');
 define('SMTP_NAME', 'Jewels.com Support');
