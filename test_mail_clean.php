@@ -1,4 +1,6 @@
 <?php
+echo "Current file: " . __FILE__ . "<br>";
+echo "Including: " . realpath('includes/mailer.php') . "<br>";
 require_once 'includes/mailer.php';
 
 $test_email = 'saranya02022005@gmail.com'; 
