@@ -52,11 +52,12 @@ class PHPMailerLite {
             $this->log[] = "S: " . $this->getResponse($socket);
             
             $this->log[] = "C: [USER]\n";
-            fwrite($socket, base64_encode($this->user) . "\r\n");
+            fwrite($socket, base64_encode(trim($this->user)) . "\r\n");
             $this->log[] = "S: " . $this->getResponse($socket);
             
             $this->log[] = "C: [PASS]\n";
-            fwrite($socket, base64_encode(str_replace(' ', '', $this->pass)) . "\r\n");
+            $cleanPass = str_replace(' ', '', trim($this->pass));
+            fwrite($socket, base64_encode($cleanPass) . "\r\n");
             $res = $this->getResponse($socket);
             $this->log[] = "S: " . $res;
             
