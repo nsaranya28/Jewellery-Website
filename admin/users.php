@@ -36,11 +36,6 @@ include 'includes/header.php';
         <td><strong>₹<?= number_format($u['total_spent']) ?></strong></td>
         <td style="font-size:12px;color:var(--gray);"><?= date('d M Y',strtotime($u['created_at'])) ?></td>
         <td><span class="badge <?= $u['is_active']?'badge-green':'badge-red' ?>"><?= $u['is_active']?'Active':'Blocked' ?></span></td>
-        <td>
-          <a href="users.php?toggle=<?= $u['id'] ?>" class="btn btn-sm <?= $u['is_active']?'btn-red':'btn-outline' ?>">
-            <?= $u['is_active'] ? '<i class="fas fa-ban"></i> Block' : '<i class="fas fa-check"></i> Unblock' ?>
-          </a>
-        </td>
       </tr>
       <?php endforeach; ?>
     </tbody>

@@ -11,9 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
   header('Location: orders.php'); exit;
 }
 
-$status = $_GET['status'] ?? '';
-$where  = $status ? "WHERE o.status='$status'" : '';
-$orders = $pdo->query("SELECT o.*, u.name as user_name, u.email as user_email, (SELECT COUNT(*) FROM order_items WHERE order_id=o.id) as item_count FROM orders o JOIN users u ON o.user_id=u.id $where ORDER BY o.created_at DESC")->fetchAll();
 
 $statuses = ['confirmed','packed','shipped','out_for_delivery','delivered','cancelled'];
 $adminTitle = 'Order Management';
@@ -29,8 +26,6 @@ include 'includes/header.php';
   </div>
 </div>
 
-<div class="admin-table-wrap">
-  <div class="admin-table-head"><h3>📦 All Orders (<?= count($orders) ?>)</h3></div>
   <table>
     <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
     <tbody>

@@ -48,12 +48,6 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
 
     <!-- Nav Icons -->
     <div class="header-icons">
-      <?php if (isLoggedIn()): ?>
-        <a href="<?= SITE_URL ?>/profile.php" class="hicon" title="My Account">
-          <i class="fas fa-user-circle"></i>
-          <span class="hicon-label"><?= safeHtml(explode(' ', currentUser()['name'])[0]) ?></span>
-        </a>
-      <?php else: ?>
         <a href="<?= SITE_URL ?>/login.php" class="hicon" title="Login">
           <i class="fas fa-user"></i>
           <span class="hicon-label">Login</span>
