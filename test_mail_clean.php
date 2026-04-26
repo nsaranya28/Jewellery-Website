@@ -1,27 +1,20 @@
 <?php
-require_once 'includes/mail_config.php';
-require_once 'includes/PHPMailerLite.php';
+require_once 'includes/mailer.php';
 
-$to = 'nsaranya282@gmail.com';
-$subject = "💎 OTP System Test - Jewels.com";
-$message = "Test email.";
+// Test email address
+$test_email = 'saranya02022005@gmail.com'; 
+$subject = "Test Email from Jewels.com";
+$message = "This is a test email to verify SMTP configuration.";
 
-// Try with spaces removed
-$clean_pass = str_replace(' ', '', SMTP_PASS);
+echo "<h1>SMTP Test</h1>";
+echo "Attempting to send email to $test_email...<br>";
 
-echo "Testing with cleaned password (no spaces)...\n";
+$result = send_mail_smtp($test_email, $subject, $message);
 
-$mailer = new PHPMailerLite(
-    SMTP_HOST,
-    SMTP_PORT,
-    SMTP_USER,
-    $clean_pass,
-    SMTP_FROM,
-    SMTP_NAME
-);
-
-if ($mailer->send($to, $subject, $message)) {
-    echo "\n✅ SUCCESS: Email sent successfully!\n";
+if ($result === true) {
+    echo "<b style='color:green;'>SUCCESS: Email sent successfully!</b>";
 } else {
-    echo "\n❌ FAILURE: " . $mailer->getLastError() . "\n";
+    echo "<b style='color:red;'>FAILED: Email sending failed.</b><br>";
+    echo "<pre>" . htmlspecialchars($result) . "</pre>";
 }
+?>
