@@ -48,6 +48,27 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
 
     <!-- Nav Icons -->
     <div class="header-icons">
+      <?php if (isLoggedIn()): ?>
+        <div class="hicon-dropdown">
+          <a href="<?= SITE_URL ?>/profile.php" class="hicon" title="My Account">
+            <i class="fas fa-user-circle"></i>
+            <span class="hicon-label"><?= safeHtml(explode(' ', currentUser()['name'])[0]) ?> <i class="fas fa-chevron-down" style="font-size:10px;margin-left:2px;"></i></span>
+          </a>
+          <div class="dropdown-menu">
+            <div class="dropdown-header">
+              <strong>Hello, <?= safeHtml(currentUser()['name']) ?></strong>
+              <span><?= safeHtml(currentUser()['email']) ?></span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="<?= SITE_URL ?>/profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a>
+            <a href="<?= SITE_URL ?>/my-orders.php"><i class="fas fa-box"></i> My Orders</a>
+            <a href="<?= SITE_URL ?>/wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a>
+            <a href="<?= SITE_URL ?>/addresses.php"><i class="fas fa-location-dot"></i> My Addresses</a>
+            <div class="dropdown-divider"></div>
+            <a href="<?= SITE_URL ?>/logout.php" style="color:var(--red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      <?php else: ?>
         <a href="<?= SITE_URL ?>/login.php" class="hicon" title="Login">
           <i class="fas fa-user"></i>
           <span class="hicon-label">Login</span>
