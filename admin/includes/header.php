@@ -24,6 +24,7 @@
     <a href="<?= SITE_URL ?>/admin/users.php" class="<?= (basename($_SERVER['PHP_SELF'])==='users.php')?'active':'' ?>"><i class="fas fa-users"></i> Users</a>
     <a href="<?= SITE_URL ?>/admin/stock.php" class="<?= (basename($_SERVER['PHP_SELF'])==='stock.php')?'active':'' ?>"><i class="fas fa-warehouse"></i> Stock</a>
     <a href="<?= SITE_URL ?>/admin/reports.php" class="<?= (basename($_SERVER['PHP_SELF'])==='reports.php')?'active':'' ?>"><i class="fas fa-chart-bar"></i> Reports</a>
+    <a href="<?= SITE_URL ?>/admin/feedbacks.php" class="<?= (basename($_SERVER['PHP_SELF'])==='feedbacks.php')?'active':'' ?>"><i class="fas fa-comments"></i> Feedbacks</a>
     <hr style="border-color:rgba(255,255,255,0.1);margin:10px 0;"/>
     <a href="<?= SITE_URL ?>/" target="_blank"><i class="fas fa-external-link-alt"></i> View Store</a>
     <a href="<?= SITE_URL ?>/admin/logout.php" style="color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> Logout</a>
