@@ -12,7 +12,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 }
 
 
+$status = $_GET['status'] ?? '';
 $statuses = ['confirmed','packed','shipped','out_for_delivery','delivered','cancelled'];
+
+// Fetch orders with user info and item count
+$sql = "SELECT o.*, u.name AS user_name, u.email AS user_email,
+        (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) AS item_count
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id";
+if ($status && in_array($status, $statuses)) {
+  $sql .= " WHERE o.status = ?";
+}
+$sql .= " ORDER BY o.created_at DESC";
+
+$stmt = $pdo->prepare($sql);
+if ($status && in_array($status, $statuses)) {
+  $stmt->execute([$status]);
+} else {
+  $stmt->execute();
+}
+$orders = $stmt->fetchAll();
+
 $adminTitle = 'Order Management';
 include 'includes/header.php';
 ?>
