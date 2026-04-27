@@ -165,6 +165,17 @@ CREATE TABLE IF NOT EXISTS recently_viewed (
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+-- Feedbacks
+CREATE TABLE IF NOT EXISTS feedbacks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  order_id INT DEFAULT NULL,
+  rating TINYINT NOT NULL,
+  comments TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- ============================================================
 --  SEED DATA
 -- ============================================================
