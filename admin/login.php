@@ -41,6 +41,10 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1a1207,
 .btn{width:100%;padding:13px;background:linear-gradient(135deg,#8b6914,#c9a227);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:all 0.2s;}
 .btn:hover{box-shadow:0 6px 20px rgba(201,162,39,0.4);}
 .error{background:#f8d7da;color:#721c24;padding:12px;border-radius:10px;font-size:13px;margin-bottom:16px;}
+.flash{padding:12px;border-radius:10px;font-size:13px;margin-bottom:16px;}
+.flash-success{background:#d4edda;color:#155724;}
+.flash-error{background:#f8d7da;color:#721c24;}
+.flash-info{background:rgba(201,162,39,0.1);color:#8b6914;}
 .hint{background:rgba(201,162,39,0.1);border:1px solid #f5d16b;border-radius:10px;padding:10px 14px;font-size:12px;color:#8b6914;margin-top:14px;}
 </style>
 </head><body>
@@ -50,6 +54,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1a1207,
     <h2>Admin Login</h2>
     <p>Jewels.com Administration Panel</p>
   </div>
+  <?php showFlash(); ?>
   <?php if (!empty($error)): ?><div class="error">❌ <?= safeHtml($error) ?></div><?php endif; ?>
   <form method="POST">
     <div class="form-group"><label>Email</label><input type="email" name="email" required placeholder="admin@jewels.com" value="<?= safeHtml($_POST['email'] ?? '') ?>"/></div>
