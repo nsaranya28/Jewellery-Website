@@ -188,8 +188,8 @@ function applyCoupon(PDO $pdo, $code, $subtotal) {
         }
     }
 
-    if ($subtotal > 0 && $subtotal < $coupon['min_order']) {
-        return ['error' => 'Minimum order of ' . money($coupon['min_order']) . ' required.'];
+    if ($subtotal > 0 && $subtotal < $coupon['min_amount']) {
+        return ['error' => 'Minimum amount not reached'];
     }
 
     $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
