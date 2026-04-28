@@ -10,16 +10,36 @@ if (isset($_GET['delete'])) {
   flashMessage('success','Coupon deleted.'); header('Location: coupons.php'); exit;
 }
 
-// Add coupon
+// Edit Mode
+$editCoupon = null;
+if (isset($_GET['edit'])) {
+    $stmt = $pdo->prepare("SELECT * FROM coupons WHERE id=?");
+    $stmt->execute([(int)$_GET['edit']]);
+    $editCoupon = $stmt->fetch();
+}
+
+// Add/Update coupon
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $code     = strtoupper(trim($_POST['code']));
-  $type     = $_POST['type'];
-  $discount = (float)$_POST['discount'];
-  $minOrder = (float)$_POST['min_order'];
-  $maxUses  = (int)$_POST['max_uses'];
-  $expiry   = $_POST['expiry'] ?: null;
-  $pdo->prepare("INSERT INTO coupons (code,type,discount,min_order,max_uses,expiry) VALUES (?,?,?,?,?,?)")->execute([$code,$type,$discount,$minOrder,$maxUses,$expiry]);
-  flashMessage('success','Coupon created!'); header('Location: coupons.php'); exit;
+  $code       = strtoupper(trim($_POST['code']));
+  $type       = $_POST['type'];
+  $discount   = (float)$_POST['discount'];
+  $minOrder   = (float)$_POST['min_order'];
+  $maxUses    = (int)$_POST['max_uses'];
+  $startDate  = $_POST['start_date'] ?: null;
+  $endDate    = $_POST['end_date'] ?: null;
+  $isActive   = isset($_POST['is_active']) ? 1 : 0;
+  $id         = (int)($_POST['id'] ?? 0);
+
+  if ($id > 0) {
+      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_order=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
+          ->execute([$code, $type, $discount, $minOrder, $maxUses, $startDate, $endDate, $isActive, $id]);
+      flashMessage('success','Coupon updated!');
+  } else {
+      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_order,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
+          ->execute([$code,$type,$discount,$minOrder,$maxUses,$startDate,$endDate]);
+      flashMessage('success','Coupon created!');
+  }
+  header('Location: coupons.php'); exit;
 }
 
 $coupons = $pdo->query("SELECT * FROM coupons ORDER BY created_at DESC")->fetchAll();
@@ -31,7 +51,7 @@ include 'includes/header.php';
   <div class="admin-table-wrap">
     <div class="admin-table-head"><h3>🏷️ Active Coupons</h3></div>
     <table>
-      <thead><tr><th>Code</th><th>Type</th><th>Discount</th><th>Min Order</th><th>Uses</th><th>Expiry</th><th>Status</th><th></th></tr></thead>
+      <thead><tr><th>Code</th><th>Type</th><th>Discount</th><th>Min Order</th><th>Validity Period</th><th>Status</th><th>Action</th></tr></thead>
       <tbody>
         <?php foreach ($coupons as $c): ?>
         <tr>
@@ -39,10 +59,15 @@ include 'includes/header.php';
           <td><?= ucfirst($c['type']) ?></td>
           <td><strong><?= $c['type']==='percent' ? $c['discount'].'%' : '₹'.number_format($c['discount']) ?></strong></td>
           <td>₹<?= number_format($c['min_order']) ?></td>
-          <td><?= $c['used_count'] ?> / <?= $c['max_uses'] ?></td>
-          <td style="font-size:12px;"><?= $c['expiry'] ? date('d M Y',strtotime($c['expiry'])) : 'No expiry' ?></td>
+          <td style="font-size:11px; line-height:1.4;">
+            <div style="color:var(--gray);">From: <?= $c['start_date'] ? date('d M Y',strtotime($c['start_date'])) : 'Anytime' ?></div>
+            <div style="color:var(--gray);">To: <?= $c['end_date'] ? date('d M Y',strtotime($c['end_date'])) : 'No expiry' ?></div>
+          </td>
           <td><span class="badge <?= $c['is_active']?'badge-green':'badge-red' ?>"><?= $c['is_active']?'Active':'Inactive' ?></span></td>
-          <td><a href="coupons.php?delete=<?= $c['id'] ?>" class="btn btn-sm btn-red" onclick="return confirm('Delete?')"><i class="fas fa-trash"></i></a></td>
+          <td style="white-space:nowrap;">
+            <a href="coupons.php?edit=<?= $c['id'] ?>" class="btn btn-sm btn-outline"><i class="fas fa-edit"></i></a>
+            <a href="coupons.php?delete=<?= $c['id'] ?>" class="btn btn-sm btn-red" onclick="return confirm('Delete?')"><i class="fas fa-trash"></i></a>
+          </td>
         </tr>
         <?php endforeach; ?>
       </tbody>
@@ -50,21 +75,43 @@ include 'includes/header.php';
   </div>
 
   <div class="admin-form">
-    <h3 style="font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:18px;">➕ Create Coupon</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:18px;">
+        <?= $editCoupon ? '📝 Edit Coupon' : '➕ Create Coupon' ?>
+    </h3>
     <form method="POST">
-      <div class="form-group"><label>Coupon Code *</label><input type="text" name="code" required placeholder="e.g. SAVE10" style="text-transform:uppercase;"/></div>
+      <?php if ($editCoupon): ?>
+          <input type="hidden" name="id" value="<?= $editCoupon['id'] ?>"/>
+      <?php endif; ?>
+
+      <div class="form-group"><label>Coupon Code *</label><input type="text" name="code" value="<?= $editCoupon ? safeHtml($editCoupon['code']) : '' ?>" required placeholder="e.g. DIWALI20" style="text-transform:uppercase;"/></div>
       <div class="form-group">
         <label>Discount Type *</label>
         <select name="type">
-          <option value="percent">Percentage (%)</option>
-          <option value="flat">Flat Amount (₹)</option>
+          <option value="percent" <?= ($editCoupon && $editCoupon['type']==='percent') ? 'selected' : '' ?>>Percentage (%)</option>
+          <option value="flat" <?= ($editCoupon && $editCoupon['type']==='flat') ? 'selected' : '' ?>>Flat Amount (₹)</option>
         </select>
       </div>
-      <div class="form-group"><label>Discount Value *</label><input type="number" name="discount" step="0.01" required placeholder="e.g. 10 for 10%"/></div>
-      <div class="form-group"><label>Minimum Order (₹)</label><input type="number" name="min_order" value="0" step="0.01"/></div>
-      <div class="form-group"><label>Max Uses</label><input type="number" name="max_uses" value="100"/></div>
-      <div class="form-group"><label>Expiry Date</label><input type="date" name="expiry"/></div>
-      <button type="submit" class="btn btn-gold" style="width:100%"><i class="fas fa-plus"></i> Create Coupon</button>
+      <div class="form-group"><label>Discount Value *</label><input type="number" name="discount" value="<?= $editCoupon ? $editCoupon['discount'] : '' ?>" step="0.01" required placeholder="e.g. 10 for 10%"/></div>
+      <div class="form-group"><label>Minimum Order (₹)</label><input type="number" name="min_order" value="<?= $editCoupon ? $editCoupon['min_order'] : '0' ?>" step="0.01"/></div>
+      <div class="form-group"><label>Max Uses</label><input type="number" name="max_uses" value="<?= $editCoupon ? $editCoupon['max_uses'] : '100' ?>"/></div>
+      <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label>Start Date</label><input type="date" name="start_date" value="<?= $editCoupon ? $editCoupon['start_date'] : '' ?>"/></div>
+          <div class="form-group"><label>End Date</label><input type="date" name="end_date" value="<?= $editCoupon ? $editCoupon['end_date'] : '' ?>"/></div>
+      </div>
+      
+      <?php if ($editCoupon): ?>
+      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" name="is_active" id="is_active" <?= $editCoupon['is_active'] ? 'checked' : '' ?> style="width:auto;"/>
+          <label for="is_active" style="margin:0;">Is Active</label>
+      </div>
+      <?php endif; ?>
+
+      <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;"><i class="fas <?= $editCoupon ? 'fa-save' : 'fa-plus' ?>"></i> <?= $editCoupon ? 'Update' : 'Create' ?></button>
+          <?php if ($editCoupon): ?>
+              <a href="coupons.php" class="btn btn-outline">Cancel</a>
+          <?php endif; ?>
+      </div>
     </form>
   </div>
 </div>

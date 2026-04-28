@@ -29,9 +29,22 @@ if (isset($_GET['update'])) {
 // Handle coupon
 $appliedCoupon  = $_SESSION['coupon'] ?? null;
 $couponDiscount = $_SESSION['coupon_discount'] ?? 0;
+// Handle coupon
 if (isset($_POST['apply_coupon'])) {
   $code   = strtoupper(trim($_POST['coupon_code'] ?? ''));
-  $result = applyCoupon($pdo, $code, 0); // subtotal will be recalculated
+  
+  // Calculate current subtotal to validate coupon
+  $st = 0;
+  if (isLoggedIn()) {
+    $itemsStmt = $pdo->prepare("SELECT SUM(COALESCE(p.discount_price, p.price) * c.quantity) FROM cart c JOIN products p ON c.product_id=p.id WHERE c.user_id=?");
+    $itemsStmt->execute([$_SESSION['user_id']]);
+  } else {
+    $itemsStmt = $pdo->prepare("SELECT SUM(COALESCE(p.discount_price, p.price) * c.quantity) FROM cart c JOIN products p ON c.product_id=p.id WHERE c.session_id=?");
+    $itemsStmt->execute([cartKey()]);
+  }
+  $st = (float)$itemsStmt->fetchColumn();
+
+  $result = applyCoupon($pdo, $code, $st);
   if (isset($result['error'])) {
     flashMessage('error', $result['error']);
   } else {
