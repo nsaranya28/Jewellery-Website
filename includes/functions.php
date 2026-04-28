@@ -174,10 +174,18 @@ function applyCoupon(PDO $pdo, $code, $subtotal) {
         return ['error' => 'Coupon not yet active. Valid from ' . date('d M Y', strtotime($coupon['start_date']))];
     }
     
-    // Check end_date first, then fallback to expiry
     $endDate = $coupon['end_date'] ?: $coupon['expiry'];
     if ($endDate && $today > $endDate) {
         return ['error' => 'Coupon Expired'];
+    }
+    
+    // Security: Check if user already used this coupon (Once per user)
+    if (isLoggedIn()) {
+        $check = $pdo->prepare("SELECT id FROM orders WHERE user_id=? AND coupon_code=? AND status != 'cancelled'");
+        $check->execute([$_SESSION['user_id'], $coupon['code']]);
+        if ($check->fetch()) {
+            return ['error' => 'You have already used this coupon code.'];
+        }
     }
     
     if ($subtotal < $coupon['min_order']) return ['error' => 'Minimum order of ' . money($coupon['min_order']) . ' required.'];

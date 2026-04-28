@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS orders (
   coupon_code VARCHAR(50) DEFAULT NULL,
   payment_method VARCHAR(50) DEFAULT 'COD',
   payment_status VARCHAR(30) DEFAULT 'pending',
-  status ENUM('confirmed','packed','shipped','out_for_delivery','delivered','cancelled') DEFAULT 'confirmed',
+  status ENUM('pending','shipped','delivered','cancelled') DEFAULT 'pending',
   notes TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -132,6 +132,8 @@ CREATE TABLE IF NOT EXISTS order_items (
 CREATE TABLE IF NOT EXISTS coupons (
   id INT AUTO_INCREMENT PRIMARY KEY,
   code VARCHAR(50) NOT NULL UNIQUE,
+  start_date DATE,
+  end_date DATE,
   type ENUM('percent','flat') DEFAULT 'percent',
   discount DECIMAL(10,2) NOT NULL,
   min_order DECIMAL(10,2) DEFAULT 0,

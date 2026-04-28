@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 
 
 $status = $_GET['status'] ?? '';
-$statuses = ['confirmed','packed','shipped','out_for_delivery','delivered','cancelled'];
+$statuses = ['pending','shipped','delivered','cancelled'];
 
 // Fetch orders with user info and item count
 $sql = "SELECT o.*, u.name AS user_name, u.email AS user_email,
