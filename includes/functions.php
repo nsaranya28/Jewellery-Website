@@ -163,11 +163,25 @@ function makeSlug($str) {
 
 // ── APPLY COUPON ──────────────────────────────────────────────
 function applyCoupon(PDO $pdo, $code, $subtotal) {
-    $stmt = $pdo->prepare("SELECT * FROM coupons WHERE code=? AND is_active=1 AND (expiry IS NULL OR expiry >= CURDATE()) AND used_count < max_uses");
+    $stmt = $pdo->prepare("SELECT * FROM coupons WHERE code=? AND is_active=1 AND used_count < max_uses");
     $stmt->execute([strtoupper($code)]);
     $coupon = $stmt->fetch();
-    if (!$coupon) return ['error' => 'Invalid or expired coupon code.'];
+    
+    if (!$coupon) return ['error' => 'Invalid coupon code.'];
+    
+    $today = date('Y-m-d');
+    if ($coupon['start_date'] && $today < $coupon['start_date']) {
+        return ['error' => 'Coupon not yet active. Valid from ' . date('d M Y', strtotime($coupon['start_date']))];
+    }
+    
+    // Check end_date first, then fallback to expiry
+    $endDate = $coupon['end_date'] ?: $coupon['expiry'];
+    if ($endDate && $today > $endDate) {
+        return ['error' => 'Coupon Expired'];
+    }
+    
     if ($subtotal < $coupon['min_order']) return ['error' => 'Minimum order of ' . money($coupon['min_order']) . ' required.'];
+    
     $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
     return ['discount' => min($discount, $subtotal), 'coupon' => $coupon];
 }
