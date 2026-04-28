@@ -50,7 +50,7 @@ if (isset($_POST['apply_coupon'])) {
   } else {
     $_SESSION['coupon']          = $result['coupon'];
     $_SESSION['coupon_code_str'] = $code;
-    flashMessage('success', "Coupon applied! ✅");
+    flashMessage('success', "Coupon Applied");
   }
   header('Location: cart.php'); exit;
 }

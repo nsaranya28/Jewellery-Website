@@ -27,7 +27,7 @@ if (isset($_POST['apply_coupon'])) {
     } else {
       $_SESSION['coupon'] = $result['coupon'];
       $_SESSION['coupon_code_str'] = $code;
-      flashMessage('success', 'Coupon Applied! ✅');
+      flashMessage('success', 'Coupon Applied');
     }
   }
   header('Location: checkout.php'); exit;
