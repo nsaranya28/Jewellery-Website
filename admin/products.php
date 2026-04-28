@@ -6,8 +6,26 @@ requireAdmin();
 
 // Delete
 if (isset($_GET['delete'])) {
-  $pdo->prepare("DELETE FROM products WHERE id=?")->execute([(int)$_GET['delete']]);
-  flashMessage('success', 'Product deleted.');
+  $id = (int)$_GET['delete'];
+  try {
+    // Check if product has orders
+    $chk = $pdo->prepare("SELECT COUNT(*) FROM order_items WHERE product_id=?");
+    $chk->execute([$id]);
+    if ($chk->fetchColumn() > 0) {
+      // Product has orders, soft delete by deactivating
+      $pdo->prepare("UPDATE products SET is_active=0 WHERE id=?")->execute([$id]);
+      flashMessage('success', 'Product has existing orders, so it was deactivated instead of deleted.');
+    } else {
+      // Safe to delete physically
+      $pdo->prepare("DELETE FROM products WHERE id=?");
+      $pdo->prepare("DELETE FROM products WHERE id=?")->execute([$id]);
+      flashMessage('success', 'Product deleted.');
+    }
+  } catch (PDOException $e) {
+    // Fallback for any other constraint failures
+    $pdo->prepare("UPDATE products SET is_active=0 WHERE id=?")->execute([$id]);
+    flashMessage('success', 'Product deactivated.');
+  }
   header('Location: products.php'); exit;
 }
 
