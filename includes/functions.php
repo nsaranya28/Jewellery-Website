@@ -166,30 +166,32 @@ function applyCoupon(PDO $pdo, $code, $subtotal) {
     $stmt = $pdo->prepare("SELECT * FROM coupons WHERE code=? AND is_active=1 AND used_count < max_uses");
     $stmt->execute([strtoupper($code)]);
     $coupon = $stmt->fetch();
-    
-    if (!$coupon) return ['error' => 'Invalid coupon code.'];
-    
+
+    if (!$coupon) return ['error' => 'Invalid Coupon'];
+
     $today = date('Y-m-d');
     if ($coupon['start_date'] && $today < $coupon['start_date']) {
         return ['error' => 'Coupon not yet active. Valid from ' . date('d M Y', strtotime($coupon['start_date']))];
     }
-    
+
     $endDate = $coupon['end_date'] ?: $coupon['expiry'];
     if ($endDate && $today > $endDate) {
         return ['error' => 'Coupon Expired'];
     }
-    
-    // Security: Check if user already used this coupon (Once per user)
+
+    // Security: check coupon_usage table (once per user)
     if (isLoggedIn()) {
-        $check = $pdo->prepare("SELECT id FROM orders WHERE user_id=? AND coupon_code=? AND status != 'cancelled'");
+        $check = $pdo->prepare("SELECT id FROM coupon_usage WHERE user_id=? AND coupon_code=?");
         $check->execute([$_SESSION['user_id'], $coupon['code']]);
         if ($check->fetch()) {
-            return ['error' => 'You have already used this coupon code.'];
+            return ['error' => 'Already Used'];
         }
     }
-    
-    if ($subtotal < $coupon['min_order']) return ['error' => 'Minimum order of ' . money($coupon['min_order']) . ' required.'];
-    
+
+    if ($subtotal > 0 && $subtotal < $coupon['min_order']) {
+        return ['error' => 'Minimum order of ' . money($coupon['min_order']) . ' required.'];
+    }
+
     $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
     return ['discount' => min($discount, $subtotal), 'coupon' => $coupon];
 }

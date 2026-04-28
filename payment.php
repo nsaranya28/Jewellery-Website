@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update coupon usage
     if ($co['coupon_code'] && isset($_SESSION['coupon'])) {
       $pdo->prepare("UPDATE coupons SET used_count=used_count+1 WHERE code=?")->execute([$co['coupon_code']]);
+      // Record per-user usage so coupon can't be reused
+      $pdo->prepare("INSERT IGNORE INTO coupon_usage (user_id, coupon_code) VALUES (?,?)")->execute([$_SESSION['user_id'], $co['coupon_code']]);
     }
 
     // Clear cart & session

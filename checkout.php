@@ -10,6 +10,34 @@ $items = $stmt->fetchAll();
 
 if (empty($items)) { header('Location: cart.php'); exit; }
 
+// Handle coupon apply
+if (isset($_POST['apply_coupon'])) {
+  $code = strtoupper(trim($_POST['coupon_code'] ?? ''));
+  $st = 0;
+  foreach ($items as $i) $st += $i['unit_price'] * $i['quantity'];
+  $result = applyCoupon($pdo, $code, $st);
+  if (isset($result['error'])) {
+    flashMessage('error', $result['error']);
+  } else {
+    // Check coupon_usage table
+    $usageCheck = $pdo->prepare("SELECT id FROM coupon_usage WHERE user_id=? AND coupon_code=?");
+    $usageCheck->execute([$_SESSION['user_id'], $code]);
+    if ($usageCheck->fetch()) {
+      flashMessage('error', 'Already Used — You have already used this coupon.');
+    } else {
+      $_SESSION['coupon'] = $result['coupon'];
+      $_SESSION['coupon_code_str'] = $code;
+      flashMessage('success', 'Coupon Applied! ✅');
+    }
+  }
+  header('Location: checkout.php'); exit;
+}
+// Handle coupon remove
+if (isset($_GET['remove_coupon'])) {
+  unset($_SESSION['coupon'], $_SESSION['coupon_discount'], $_SESSION['coupon_code_str']);
+  header('Location: checkout.php'); exit;
+}
+
 // Addresses
 $addresses = $pdo->prepare("SELECT * FROM addresses WHERE user_id=? ORDER BY is_default DESC");
 $addresses->execute([$_SESSION['user_id']]);
@@ -137,9 +165,32 @@ include 'includes/header.php';
           </div>
           <?php endforeach; ?>
           <div class="summary-row" style="margin-top:10px;"><span>Subtotal</span><span><?= money($subtotal) ?></span></div>
-          <?php if ($discount): ?><div class="summary-row" style="color:var(--green);"><span>Discount</span><span>−<?= money($discount) ?></span></div><?php endif; ?>
+          <?php if ($discount): ?>
+          <div class="summary-row" style="color:var(--green);">
+            <span>Discount (<?= safeHtml($_SESSION['coupon_code_str'] ?? '') ?>)</span>
+            <span>−<?= money($discount) ?></span>
+          </div>
+          <?php endif; ?>
           <div class="summary-row"><span>Shipping</span><span><?= $shipping ? money($shipping) : 'Free' ?></span></div>
           <div class="summary-row total"><span>Total</span><span><?= money($total) ?></span></div>
+
+          <?php if ($coupon): ?>
+            <p style="font-size:12px;color:var(--green);margin:10px 0 0;"><i class="fas fa-tag"></i> Coupon <strong><?= safeHtml($_SESSION['coupon_code_str'] ?? '') ?></strong> applied!
+              <a href="checkout.php?remove_coupon=1" style="color:var(--red);font-size:11px;margin-left:4px;">Remove</a>
+            </p>
+          <?php else: ?>
+          </div><!-- close main form's order-summary temporarily -->
+          <div style="background:var(--white);border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);margin-top:16px;">
+            <h4 style="font-size:14px;font-weight:600;color:var(--dark);margin-bottom:12px;"><i class="fas fa-ticket" style="color:var(--gold);"></i> Have a Coupon Code?</h4>
+            <div style="display:flex;gap:8px;">
+              <input type="text" name="coupon_code" id="couponCodeCheckout" placeholder="Enter coupon code" style="flex:1;padding:10px 14px;border:2px solid var(--gray-light);border-radius:var(--radius-md);font-size:14px;text-transform:uppercase;outline:none;transition:border 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--gray-light)'"/>
+              <button type="submit" name="apply_coupon" formnovalidate class="btn btn-gold" style="white-space:nowrap;">Apply</button>
+            </div>
+            <div style="font-size:11px;color:var(--gray);margin-top:6px;">Try: SAVE10 · FLAT500 · BRIDAL20</div>
+          </div>
+          <div class="order-summary" style="margin-top:16px;">
+          <?php endif; ?>
+
           <button type="submit" class="btn btn-gold btn-full" style="margin-top:16px;"><i class="fas fa-arrow-right"></i> Continue to Payment</button>
         </div>
       </div>
