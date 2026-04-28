@@ -13,17 +13,24 @@ $items = $pdo->prepare("SELECT * FROM order_items WHERE order_id=?");
 $items->execute([$order['id']]);
 $items = $items->fetchAll();
 
-$statuses  = ['confirmed', 'packed', 'shipped', 'out_for_delivery', 'delivered'];
-$statusIdx = array_search($order['status'], $statuses);
-if ($statusIdx === false) $statusIdx = -1; // e.g. cancelled
-
 $steps = [
-  ['label'=>'Confirmed', 'icon'=>'<i class="fas fa-check"></i>'],
-  ['label'=>'Packed',    'icon'=>'<i class="fas fa-box"></i>'],
-  ['label'=>'Shipped',   'icon'=>'<i class="fas fa-truck-fast"></i>'],
-  ['label'=>'On the way','icon'=>'<i class="fas fa-motorcycle"></i>'],
-  ['label'=>'Delivered', 'icon'=>'<i class="fas fa-house-chimney-check"></i>'],
+  ['label'=>'Pending',   'icon'=>'<i class="fas fa-clock"></i>',   'statuses'=>['confirmed', 'packed']],
+  ['label'=>'Shipped',   'icon'=>'<i class="fas fa-truck"></i>',   'statuses'=>['shipped', 'out_for_delivery']],
+  ['label'=>'Delivered', 'icon'=>'<i class="fas fa-box-open"></i>', 'statuses'=>['delivered']],
 ];
+
+$statusIdx = 0;
+foreach ($steps as $idx => $step) {
+    if (in_array($order['status'], $step['statuses'])) {
+        $statusIdx = $idx;
+        break;
+    }
+    // If the status is already past this step, we keep going
+}
+// Special case: if status is delivered, all steps should be marked as completed or active
+if ($order['status'] === 'delivered') $statusIdx = 2;
+elseif ($order['status'] === 'shipped' || $order['status'] === 'out_for_delivery') $statusIdx = 1;
+else $statusIdx = 0;
 
 $pageTitle = 'Order Tracking #JW' . str_pad($order['id'],6,'0',STR_PAD_LEFT) . ' — ' . SITE_NAME;
 include 'includes/header.php';

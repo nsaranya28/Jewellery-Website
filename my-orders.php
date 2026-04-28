@@ -71,7 +71,21 @@ include 'includes/header.php';
               </div>
               <div class="order-meta-item">
                 <span class="order-meta-label">Status</span>
-                <span class="status-badge status-<?= $order['status'] ?>"><?= ucwords(str_replace('_',' ',$order['status'])) ?></span>
+                <?php
+                  $displayStatus = 'Pending';
+                  $statusClass = 'pending';
+                  if ($order['status'] === 'shipped' || $order['status'] === 'out_for_delivery') {
+                    $displayStatus = 'Shipped';
+                    $statusClass = 'shipped';
+                  } elseif ($order['status'] === 'delivered') {
+                    $displayStatus = 'Delivered';
+                    $statusClass = 'delivered';
+                  } elseif ($order['status'] === 'cancelled') {
+                    $displayStatus = 'Cancelled';
+                    $statusClass = 'cancelled';
+                  }
+                ?>
+                <span class="status-badge status-<?= $statusClass ?>"><?= $displayStatus ?></span>
               </div>
             </div>
             
