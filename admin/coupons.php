@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $code       = strtoupper(trim($_POST['code']));
   $type       = $_POST['type'];
   $discount   = (float)$_POST['discount'];
-  $minOrder   = (float)$_POST['min_order'];
+  $minAmount   = (float)$_POST['min_amount'];
   $maxUses    = (int)$_POST['max_uses'];
   $startDate  = $_POST['start_date'] ?: null;
   $endDate    = $_POST['end_date'] ?: null;
@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id         = (int)($_POST['id'] ?? 0);
 
   if ($id > 0) {
-      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_order=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
-          ->execute([$code, $type, $discount, $minOrder, $maxUses, $startDate, $endDate, $isActive, $id]);
+      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_amount=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
+          ->execute([$code, $type, $discount, $minAmount, $maxUses, $startDate, $endDate, $isActive, $id]);
       flashMessage('success','Coupon updated!');
   } else {
-      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_order,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
-          ->execute([$code,$type,$discount,$minOrder,$maxUses,$startDate,$endDate]);
+      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_amount,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
+          ->execute([$code,$type,$discount,$minAmount,$maxUses,$startDate,$endDate]);
       flashMessage('success','Coupon created!');
   }
   header('Location: coupons.php'); exit;
@@ -58,7 +58,7 @@ include 'includes/header.php';
           <td><strong style="color:var(--gold-dark);font-size:14px;letter-spacing:1px;"><?= safeHtml($c['code']) ?></strong></td>
           <td><?= ucfirst($c['type']) ?></td>
           <td><strong><?= $c['type']==='percent' ? $c['discount'].'%' : '₹'.number_format($c['discount']) ?></strong></td>
-          <td>₹<?= number_format($c['min_order']) ?></td>
+          <td>₹<?= number_format($c['min_amount']) ?></td>
           <td style="font-size:11px; line-height:1.4;">
             <div style="color:var(--gray);">From: <?= $c['start_date'] ? date('d M Y',strtotime($c['start_date'])) : 'Anytime' ?></div>
             <div style="color:var(--gray);">To: <?= $c['end_date'] ? date('d M Y',strtotime($c['end_date'])) : 'No expiry' ?></div>
@@ -92,7 +92,7 @@ include 'includes/header.php';
         </select>
       </div>
       <div class="form-group"><label>Discount Value *</label><input type="number" name="discount" value="<?= $editCoupon ? $editCoupon['discount'] : '' ?>" step="0.01" required placeholder="e.g. 10 for 10%"/></div>
-      <div class="form-group"><label>Minimum Order (₹)</label><input type="number" name="min_order" value="<?= $editCoupon ? $editCoupon['min_order'] : '0' ?>" step="0.01"/></div>
+      <div class="form-group"><label>Minimum Amount (₹)</label><input type="number" name="min_amount" value="<?= $editCoupon ? $editCoupon['min_amount'] : '0' ?>" step="0.01"/></div>
       <div class="form-group"><label>Max Uses</label><input type="number" name="max_uses" value="<?= $editCoupon ? $editCoupon['max_uses'] : '100' ?>"/></div>
       <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
           <div class="form-group"><label>Start Date</label><input type="date" name="start_date" value="<?= $editCoupon ? $editCoupon['start_date'] : '' ?>"/></div>
