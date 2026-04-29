@@ -44,11 +44,15 @@ $addresses->execute([$_SESSION['user_id']]);
 $addresses = $addresses->fetchAll();
 
 // Pricing
+<?php
+// Pricing
 $subtotal = 0;
 foreach ($items as $i) $subtotal += $i['unit_price'] * $i['quantity'];
+// Determine if coupons are enabled (max purchase 50,000)
+$couponEnabled = $subtotal <= 50000;
 $coupon   = $_SESSION['coupon'] ?? null;
 $discount = 0;
-if ($coupon && $subtotal >= $coupon['min_amount']) {
+if ($coupon && $couponEnabled && $subtotal >= $coupon['min_amount']) {
   $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
   $discount = min($discount, $subtotal);
 }
