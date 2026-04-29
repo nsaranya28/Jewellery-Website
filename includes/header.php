@@ -101,14 +101,16 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
 
       <!-- Categories from DB -->
       <?php foreach ($_navCategories as $cat): ?>
-        <?php if (in_array(strtolower($cat['name']), ['gold', 'diamond'])): ?>
-          <a href="<?= SITE_URL ?>/category.php?slug=<?= $cat['slug'] ?>" class="nav-link"><?= safeHtml($cat['name']) ?></a>
+        <?php if (in_array(strtolower($cat['name']), ['gold'])): ?>
+          <a href="<?= SITE_URL ?>/category.php?slug=<?= $cat['slug'] ?>" class="nav-link"><i class="fas fa-coins" style="margin-right:6px;color:#D4AF37;"></i> <?= safeHtml($cat['name']) ?></a>
+        <?php elseif (strtolower($cat['name']) == 'diamond'): ?>
+          <a href="<?= SITE_URL ?>/category.php?slug=<?= $cat['slug'] ?>" class="nav-link"><i class="fas fa-gem" style="margin-right:6px;color:#A5D6F1;"></i> <?= safeHtml($cat['name']) ?></a>
         <?php endif; ?>
       <?php endforeach; ?>
 
       <!-- Wedding Mega Menu Tab -->
       <div class="nav-item-mega">
-        <a href="<?= SITE_URL ?>/category.php?slug=wedding" class="nav-link active">Wedding <i class="fas fa-chevron-down mega-chevron"></i></a>
+        <a href="<?= SITE_URL ?>/category.php?slug=wedding" class="nav-link active"><i class="fas fa-rings-wedding" style="margin-right:6px;display:none;"></i><i class="fas fa-heart" style="margin-right:6px;color:#83272D;"></i> Wedding <i class="fas fa-chevron-down mega-chevron"></i></a>
         <div class="mega-menu">
           <div class="mega-container container">
             <!-- Sidebar -->
@@ -170,17 +172,16 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
             <div class="mega-support">
               <div class="support-bubble">
                 <span class="support-text">How can I help you?</span>
-                <button class="support-close"><i class="fas fa-times"></i></button>
               </div>
               <div class="support-avatar">
-                <img src="https://i.pravatar.cc/100?u=support" alt="Support"/>
+                <img src="https://i.pravatar.cc/100?u=jewel-support" alt="Support"/>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <a href="<?= SITE_URL ?>/shop.php?filter=gifting" class="nav-link">Gifting</a>
+      <a href="<?= SITE_URL ?>/shop.php?filter=gifting" class="nav-link"><i class="fas fa-gift" style="margin-right:6px;color:#E67E22;"></i> Gifting</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=new" class="nav-link">New Arrivals</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=sale" class="nav-link nav-sale">Sale 🔥</a>
     </div>
