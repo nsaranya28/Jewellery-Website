@@ -44,7 +44,7 @@ $addresses->execute([$_SESSION['user_id']]);
 $addresses = $addresses->fetchAll();
 
 // Pricing
-<?php
+
 // Pricing
 $subtotal = 0;
 foreach ($items as $i) $subtotal += $i['unit_price'] * $i['quantity'];
