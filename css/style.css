@@ -1224,3 +1224,169 @@ input, select, textarea { font-family: var(--font-sans); }
 @media (max-width: 480px) {
   .category-grid { grid-template-columns: repeat(2, 1fr); }
   .product-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* -- MEGA MENU (Tanishq Style) ---------------------------------- */
+.nav-item-mega { position: static; }
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--white);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  z-index: 999;
+  border-top: 1px solid var(--gray-light);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  padding: 40px 0;
+}
+.nav-item-mega:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-container {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  gap: 40px;
+  min-height: 350px;
+}
+
+.mega-sidebar {
+  border-right: 1px solid var(--gray-light);
+  padding-right: 20px;
+}
+.mega-side-item {
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gray);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all var(--transition);
+  margin-bottom: 4px;
+}
+.mega-side-item:hover, .mega-side-item.active {
+  background: #FDF1F2;
+  color: #8B1E3F; /* Tanishq maroon-ish color */
+  font-weight: 600;
+}
+
+.mega-grid-wrap { flex: 1; }
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 24px;
+}
+
+.mega-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  transition: transform var(--transition);
+}
+.mega-card:hover { transform: translateY(-5px); }
+.mega-card-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ivory-dark);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mega-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mega-placeholder {
+  font-size: 24px;
+  color: var(--gray);
+}
+.mega-card-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  transition: color var(--transition);
+}
+.mega-card:hover .mega-card-label { color: #8B1E3F; }
+
+/* Support Bubble */
+.mega-support {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.support-bubble {
+  background: var(--white);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+  max-width: 160px;
+  font-size: 12px;
+  border: 1px solid var(--gray-light);
+}
+.support-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--white);
+  border-right: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--gray-light);
+  transform: rotate(45deg);
+}
+.support-text { display: block; margin-bottom: 4px; font-weight: 500; }
+.support-close { font-size: 10px; color: var(--gray); position: absolute; top: 8px; right: 8px; }
+.support-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--white);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.support-avatar:hover { transform: scale(1.1); }
+
+/* Active Indicator Line like Tanishq */
+.nav-link.active {
+  position: relative;
+  color: #8B1E3F !important;
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 3px;
+  background: #8B1E3F;
+  border-radius: 3px 3px 0 0;
+}
+
+@media (max-width: 1024px) {
+  .mega-container { grid-template-columns: 180px 1fr; }
+  .mega-support { display: none; }
+}
+@media (max-width: 768px) {
+  .mega-menu { position: static; opacity: 1; visibility: visible; display: none; padding: 20px; }
+  .nav-item-mega:hover .mega-menu { display: block; }
+  .mega-container { display: block; }
+  .mega-sidebar { display: flex; overflow-x: auto; border: none; padding: 0 0 15px; margin-bottom: 15px; border-bottom: 1px solid var(--gray-light); }
+  .mega-side-item { white-space: nowrap; }
+}

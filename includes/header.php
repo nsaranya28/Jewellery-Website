@@ -95,21 +95,94 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
   <nav class="site-nav" id="siteNav">
     <div class="nav-inner container">
       <a href="<?= SITE_URL ?>/" class="nav-link">Home</a>
-      <div class="nav-dropdown">
-        <a href="<?= SITE_URL ?>/shop.php" class="nav-link">Shop <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
-        <div class="dropdown-menu">
-          <a href="<?= SITE_URL ?>/shop.php">All Jewellery</a>
-          <?php foreach ($_navCategories as $cat): ?>
-            <a href="<?= SITE_URL ?>/category.php?slug=<?= $cat['slug'] ?>"><?= safeHtml($cat['name']) ?></a>
-          <?php endforeach; ?>
+      
+      <!-- All Jewellery Tab -->
+      <a href="<?= SITE_URL ?>/shop.php" class="nav-link">All Jewellery</a>
+
+      <!-- Categories from DB -->
+      <?php foreach ($_navCategories as $cat): ?>
+        <?php if (in_array(strtolower($cat['name']), ['gold', 'diamond'])): ?>
+          <a href="<?= SITE_URL ?>/category.php?slug=<?= $cat['slug'] ?>" class="nav-link"><?= safeHtml($cat['name']) ?></a>
+        <?php endif; ?>
+      <?php endforeach; ?>
+
+      <!-- Wedding Mega Menu Tab -->
+      <div class="nav-item-mega">
+        <a href="<?= SITE_URL ?>/category.php?slug=wedding" class="nav-link active">Wedding <i class="fas fa-chevron-down mega-chevron"></i></a>
+        <div class="mega-menu">
+          <div class="mega-container container">
+            <!-- Sidebar -->
+            <div class="mega-sidebar">
+              <div class="mega-side-item active">Category</div>
+              <div class="mega-side-item">Community</div>
+              <div class="mega-side-item">Metal</div>
+            </div>
+            
+            <!-- Grid -->
+            <div class="mega-grid-wrap">
+              <div class="mega-grid">
+                <a href="<?= SITE_URL ?>/category.php?slug=wedding" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/rivaah_collection_1777472754593.png" alt="All Rivaah"/>
+                  </div>
+                  <span class="mega-card-label">All Rivaah</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop.php?q=choker" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/wedding_choker_1777471841008.png" alt="Wedding Choker"/>
+                  </div>
+                  <span class="mega-card-label">Wedding Choker</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop.php?q=haram" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/wedding_haram_1777472106601.png" alt="Wedding Haram"/>
+                  </div>
+                  <span class="mega-card-label">Wedding Haram</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop.php?q=bangles" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/wedding_bangles_1777472425765.png" alt="Wedding Bangles"/>
+                  </div>
+                  <span class="mega-card-label">Wedding Bangles</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop.php?q=diamond" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/wedding_diamond_necklace_1777472513071.png" alt="Wedding Diamond"/>
+                  </div>
+                  <span class="mega-card-label">Wedding Diamond</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop.php?q=mangalsutra" class="mega-card">
+                  <div class="mega-card-img">
+                    <img src="<?= SITE_URL ?>/images/wedding_mangalsutra_1777472655822.png" alt="Wedding Mangalsutra"/>
+                  </div>
+                  <span class="mega-card-label">Wedding Mangalsutra</span>
+                </a>
+                <div class="mega-card">
+                  <div class="mega-card-img">
+                    <div class="mega-placeholder"><i class="fas fa-plus"></i></div>
+                  </div>
+                  <span class="mega-card-label">Accessories</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat/Support integration like in screenshot -->
+            <div class="mega-support">
+              <div class="support-bubble">
+                <span class="support-text">How can I help you?</span>
+                <button class="support-close"><i class="fas fa-times"></i></button>
+              </div>
+              <div class="support-avatar">
+                <img src="https://i.pravatar.cc/100?u=support" alt="Support"/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <a href="<?= SITE_URL ?>/shop.php?filter=featured" class="nav-link">Featured</a>
+
+      <a href="<?= SITE_URL ?>/shop.php?filter=gifting" class="nav-link">Gifting</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=new" class="nav-link">New Arrivals</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=sale" class="nav-link nav-sale">Sale 🔥</a>
-      <?php if (isLoggedIn()): ?>
-        <a href="<?= SITE_URL ?>/my-orders.php" class="nav-link">My Orders</a>
-      <?php endif; ?>
     </div>
   </nav>
 </header>
