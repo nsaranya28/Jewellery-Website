@@ -51,7 +51,7 @@ foreach ($items as $i) $subtotal += $i['unit_price'] * $i['quantity'];
 $couponEnabled = $subtotal <= 50000;
 $coupon   = $_SESSION['coupon'] ?? null;
 $discount = 0;
-if ($coupon && $couponEnabled && $subtotal >= ($coupon['min_order'] ?? 0)) {
+if ($coupon && $couponEnabled && $subtotal >= ($coupon['min_amount'] ?? 0)) {
   $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
   $discount = min($discount, $subtotal);
 }

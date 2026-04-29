@@ -188,7 +188,7 @@ function applyCoupon(PDO $pdo, $code, $subtotal) {
         }
     }
 
-    if ($subtotal > 0 && $subtotal < $coupon['min_order']) {
+    if ($subtotal > 0 && $subtotal < $coupon['min_amount']) {
         return ['error' => 'Minimum amount not reached'];
     }
 

@@ -31,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id         = (int)($_POST['id'] ?? 0);
 
   if ($id > 0) {
-      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_order=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
+      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_amount=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
           ->execute([$code, $type, $discount, $minAmount, $maxUses, $startDate, $endDate, $isActive, $id]);
       flashMessage('success','Coupon updated!');
   } else {
-      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_order,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
+      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_amount,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
           ->execute([$code,$type,$discount,$minAmount,$maxUses,$startDate,$endDate]);
       flashMessage('success','Coupon created!');
   }

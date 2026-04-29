@@ -82,6 +82,11 @@ if ($coupon && $subtotal >= $coupon['min_amount']) {
 $shipping = ($subtotal >= 5000 || empty($items)) ? 0 : 150;
 $total    = $subtotal - $discount + $shipping;
 
+// Fetch active coupons for "Try" hints
+$activeCouponsStmt = $pdo->query("SELECT code FROM coupons WHERE is_active=1 AND (end_date IS NULL OR end_date >= CURDATE()) LIMIT 3");
+$activeCoupons = $activeCouponsStmt->fetchAll(PDO::FETCH_COLUMN);
+
+
 $pageTitle = 'Shopping Cart — ' . SITE_NAME;
 include 'includes/header.php';
 ?>
@@ -178,7 +183,9 @@ include 'includes/header.php';
               <input type="text" name="coupon_code" id="couponCode" placeholder="Coupon code" value="">
               <button type="submit" name="apply_coupon">Apply</button>
             </div>
-            <div style="font-size:11px;color:var(--gray);">Try: SAVE10 · FLAT500 · BRIDAL20</div>
+            <?php if (!empty($activeCoupons)): ?>
+              <div style="font-size:11px;color:var(--gray);">Try: <?= implode(' · ', array_map('safeHtml', $activeCoupons)) ?></div>
+            <?php endif; ?>
           </form>
           <?php endif; ?>
 
