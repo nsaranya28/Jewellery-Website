@@ -44,20 +44,24 @@ $addresses->execute([$_SESSION['user_id']]);
 $addresses = $addresses->fetchAll();
 
 // Pricing
-
-// Pricing
 $subtotal = 0;
 foreach ($items as $i) $subtotal += $i['unit_price'] * $i['quantity'];
+
 // Determine if coupons are enabled (max purchase 50,000)
 $couponEnabled = $subtotal <= 50000;
 $coupon   = $_SESSION['coupon'] ?? null;
 $discount = 0;
-if ($coupon && $couponEnabled && $subtotal >= $coupon['min_amount']) {
+if ($coupon && $couponEnabled && $subtotal >= ($coupon['min_order'] ?? 0)) {
   $discount = ($coupon['type'] === 'percent') ? ($subtotal * $coupon['discount'] / 100) : $coupon['discount'];
   $discount = min($discount, $subtotal);
 }
 $shipping = $subtotal >= 5000 ? 0 : 150;
 $total    = $subtotal - $discount + $shipping;
+
+// Fetch active coupons for "Try" hints
+$activeCouponsStmt = $pdo->query("SELECT code FROM coupons WHERE is_active=1 AND (end_date IS NULL OR end_date >= CURDATE()) LIMIT 3");
+$activeCoupons = $activeCouponsStmt->fetchAll(PDO::FETCH_COLUMN);
+
 
 // Handle submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -190,7 +194,9 @@ include 'includes/header.php';
               <input type="text" name="coupon_code" id="couponCodeCheckout" placeholder="Enter coupon code" style="flex:1;padding:10px 14px;border:2px solid var(--gray-light);border-radius:var(--radius-md);font-size:14px;text-transform:uppercase;outline:none;transition:border 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--gray-light)'"/>
               <button type="submit" name="apply_coupon" formnovalidate class="btn btn-gold" style="white-space:nowrap;">Apply</button>
             </div>
-            <div style="font-size:11px;color:var(--gray);margin-top:6px;">Try: SAVE10 · FLAT500 · BRIDAL20</div>
+            <?php if (!empty($activeCoupons)): ?>
+              <div style="font-size:11px;color:var(--gray);margin-top:6px;">Try: <?= implode(' · ', array_map('safeHtml', $activeCoupons)) ?></div>
+            <?php endif; ?>
           </div>
           <div class="order-summary" style="margin-top:16px;">
           <?php endif; ?>
