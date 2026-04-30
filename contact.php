@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/functions.php';
 
-// Handle Form Submission
+// Handle Form Submission BEFORE any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name    = trim($_POST['name'] ?? '');
     $email   = trim($_POST['email'] ?? '');
@@ -22,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         flashMessage('error', 'Please fill in all fields.');
     }
 }
+
+$pageTitle = "Contact Us — Jewels.com";
+require_once __DIR__ . '/includes/header.php';
 ?>
 
 <!-- ── CONTACT HERO ────────────────────────────────────────── -->
