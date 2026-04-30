@@ -91,6 +91,13 @@ require_once __DIR__ . '/includes/header.php';
             </div>
           </div>
         </div>
+
+        <div style="margin-top: 30px; border-radius: var(--radius-md); overflow: hidden; height: 250px; border: 1px solid var(--gold-pale);">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.741000!2d80.231000!3d13.041000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52665e!2sT.+Nagar%2C+Chennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1!5m2!1sen!2sin" 
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
       </div>
 
       <!-- Contact Form -->
@@ -137,20 +144,6 @@ require_once __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<!-- ── MAP SECTION ─────────────────────────────────────────── -->
-<section style="margin-bottom: -70px;">
-  <div style="height: 450px; width: 100%; border-top: 1px solid var(--gold-pale);">
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.741000!2d80.231000!3d13.041000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52665e!2sT.+Nagar%2C+Chennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1!5m2!1sen!2sin" 
-      width="100%" 
-      height="100%" 
-      style="border:0;" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-  </div>
-</section>
 
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
