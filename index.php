@@ -18,6 +18,12 @@ $testimonials = [
   ['name'=>'Priya Devi','loc'=>'Madurai','rating'=>5,'text'=>'Excellent quality gold chain. The Singapore pattern is exactly what I wanted. Packaging was premium. 100% recommended!','img'=>'https://i.pravatar.cc/80?img=49'],
 ];
 
+// Active Coupons
+$today = date('Y-m-d');
+$activeCoupons = $pdo->prepare("SELECT * FROM coupons WHERE is_active=1 AND used_count < max_uses AND (end_date >= ? OR expiry >= ? OR (end_date IS NULL AND expiry IS NULL)) ORDER BY created_at DESC LIMIT 3");
+$activeCoupons->execute([$today, $today]);
+$coupons = $activeCoupons->fetchAll();
+
 include 'includes/header.php';
 ?>
 
@@ -74,6 +80,67 @@ include 'includes/header.php';
     </div>
   </div>
 </section>
+
+<!-- ── OFFERS & DEALS ──────────────────────────────────────── -->
+<?php if (!empty($coupons)): ?>
+<section class="section section-ivory" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">🏷️ Special Savings</div>
+      <h2>Exclusive Offers & Deals</h2>
+      <p>Limited time discounts on your favourite jewellery collections</p>
+      <div class="gold-line"></div>
+    </div>
+    
+    <div class="offer-grid">
+      <?php foreach ($coupons as $c): 
+        $discountTxt = ($c['type'] === 'percent') ? round($c['discount']) . '% OFF' : money($c['discount']) . ' OFF';
+      ?>
+      <div class="offer-card">
+        <div class="offer-cutout left"></div>
+        <div class="offer-cutout right"></div>
+        <div class="offer-content">
+          <div class="offer-badge"><?= $discountTxt ?></div>
+          <h3 class="offer-title">Save on your next purchase</h3>
+          <p class="offer-desc">Min. order <?= money($c['min_amount']) ?>. Valid till <?= date('d M Y', strtotime($c['end_date'] ?: $c['expiry'])) ?>.</p>
+          <div class="offer-code-wrap">
+            <span class="offer-code" id="code-<?= $c['id'] ?>"><?= safeHtml($c['code']) ?></span>
+            <button class="btn-copy" onclick="copyCoupon('<?= safeHtml($c['code']) ?>', this)">
+              <i class="fas fa-copy"></i> <span>Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<script>
+function copyCoupon(code, btn) {
+    navigator.clipboard.writeText(code).then(() => {
+        const span = btn.querySelector('span');
+        const icon = btn.querySelector('i');
+        const originalTxt = span.innerText;
+        const originalIcon = icon.className;
+        
+        span.innerText = 'Copied!';
+        icon.className = 'fas fa-check';
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+            span.innerText = originalTxt;
+            icon.className = originalIcon;
+            btn.classList.remove('copied');
+        }, 2000);
+        
+        if (typeof showToast === 'function') {
+            showToast('Coupon code copied to clipboard! 🎟️', 'success');
+        }
+    });
+}
+</script>
+<?php endif; ?>
 
 <!-- ── FEATURED PRODUCTS ───────────────────────────────────── -->
 <section class="section section-ivory">
