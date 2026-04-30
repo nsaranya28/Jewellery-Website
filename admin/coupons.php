@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id         = (int)($_POST['id'] ?? 0);
 
   if ($id > 0) {
-      $pdo->prepare("UPDATE coupons SET code=?, type=?, discount=?, min_amount=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
-          ->execute([$code, $type, $discount, $minAmount, $maxUses, $startDate, $endDate, $isActive, $id]);
+      $pdo->prepare("UPDATE coupons SET code=?, description=?, type=?, discount=?, min_amount=?, max_uses=?, start_date=?, end_date=?, is_active=? WHERE id=?")
+          ->execute([$code, $_POST['description'], $type, $discount, $minAmount, $maxUses, $startDate, $endDate, $isActive, $id]);
       flashMessage('success','Coupon updated!');
   } else {
-      $pdo->prepare("INSERT INTO coupons (code,type,discount,min_amount,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?)")
-          ->execute([$code,$type,$discount,$minAmount,$maxUses,$startDate,$endDate]);
+      $pdo->prepare("INSERT INTO coupons (code,description,type,discount,min_amount,max_uses,start_date,end_date) VALUES (?,?,?,?,?,?,?,?)")
+          ->execute([$code,$_POST['description'],$type,$discount,$minAmount,$maxUses,$startDate,$endDate]);
       flashMessage('success','Coupon created!');
   }
   header('Location: coupons.php'); exit;
@@ -84,6 +84,7 @@ include 'includes/header.php';
       <?php endif; ?>
 
       <div class="form-group"><label>Coupon Code *</label><input type="text" name="code" value="<?= $editCoupon ? safeHtml($editCoupon['code']) : '' ?>" required placeholder="e.g. DIWALI20" style="text-transform:uppercase;"/></div>
+      <div class="form-group"><label>Description</label><textarea name="description" placeholder="e.g. Get 10% off on all gold jewellery..." rows="2"><?= $editCoupon ? safeHtml($editCoupon['description']) : '' ?></textarea></div>
       <div class="form-group">
         <label>Discount Type *</label>
         <select name="type">

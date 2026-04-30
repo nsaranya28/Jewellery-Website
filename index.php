@@ -95,20 +95,23 @@ include 'includes/header.php';
     <div class="offer-grid">
       <?php foreach ($coupons as $c): 
         $discountTxt = ($c['type'] === 'percent') ? round($c['discount']) . '% OFF' : money($c['discount']) . ' OFF';
+        $title = $c['description'] ? 'Special Offer' : 'Save on your purchase';
+        $desc = $c['description'] ?: 'Exclusive discount for our valued customers. Limited time only!';
       ?>
       <div class="offer-card">
         <div class="offer-cutout left"></div>
         <div class="offer-cutout right"></div>
-        <div class="offer-content">
-          <div class="offer-badge"><?= $discountTxt ?></div>
-          <h3 class="offer-title">Save on your next purchase</h3>
-          <p class="offer-desc">Min. order <?= money($c['min_amount']) ?>. Valid till <?= date('d M Y', strtotime($c['end_date'] ?: $c['expiry'])) ?>.</p>
-          <div class="offer-code-wrap">
-            <span class="offer-code" id="code-<?= $c['id'] ?>"><?= safeHtml($c['code']) ?></span>
-            <button class="btn-copy" onclick="copyCoupon('<?= safeHtml($c['code']) ?>', this)">
-              <i class="fas fa-copy"></i> <span>Copy</span>
-            </button>
-          </div>
+        <div class="offer-badge"><?= $discountTxt ?></div>
+        <h3 class="offer-title"><?= $title ?></h3>
+        <p class="offer-desc"><?= safeHtml($desc) ?></p>
+        <div style="font-size: 11px; color: var(--gray); margin-bottom: 15px;">
+            <i class="fas fa-info-circle"></i> Min. order <?= money($c['min_amount']) ?>. Valid till <?= date('d M Y', strtotime($c['end_date'] ?: ($c['expiry'] ?: 'today'))) ?>.
+        </div>
+        <div class="offer-code-wrap">
+          <span class="offer-code" id="code-<?= $c['id'] ?>"><?= safeHtml($c['code']) ?></span>
+          <button class="btn-copy" onclick="copyCoupon('<?= safeHtml($c['code']) ?>', this)">
+            <i class="fas fa-copy"></i> <span>Copy</span>
+          </button>
         </div>
       </div>
       <?php endforeach; ?>
