@@ -107,6 +107,7 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
       <a href="<?= SITE_URL ?>/shop.php?filter=featured" class="nav-link">Featured</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=new" class="nav-link">New Arrivals</a>
       <a href="<?= SITE_URL ?>/shop.php?filter=sale" class="nav-link nav-sale">Sale 🔥</a>
+      <a href="<?= SITE_URL ?>/contact.php" class="nav-link">Contact</a>
       <?php if (isLoggedIn()): ?>
         <a href="<?= SITE_URL ?>/my-orders.php" class="nav-link">My Orders</a>
       <?php endif; ?>

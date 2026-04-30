@@ -46,9 +46,11 @@
         <li><a href="#">Return Policy</a></li>
         <li><a href="#">Shipping Info</a></li>
         <li><a href="#">Size Guide</a></li>
+        <li><a href="<?= SITE_URL ?>/contact.php">Contact Us</a></li>
         <li><a href="#">Privacy Policy</a></li>
       </ul>
       <div class="footer-contact">
+        <p><i class="fas fa-location-dot"></i> 45, Golden Avenue, T. Nagar, Chennai</p>
         <p><i class="fas fa-phone"></i> +91 98765 43210</p>
         <p><i class="fas fa-envelope"></i> support@jewels.com</p>
       </div>
