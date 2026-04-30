@@ -134,14 +134,6 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
     </div>
-
-    <!-- ── MAP BELOW INFO ── -->
-    <div style="margin-top: 40px; border-radius: var(--radius-lg); overflow: hidden; height: 400px; border: 1px solid var(--gold-pale); box-shadow: var(--shadow-sm);">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.741000!2d80.231000!3d13.041000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52665e!2sT.+Nagar%2C+Chennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1!5m2!1sen!2sin" 
-        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
-      </iframe>
-    </div>
   </div>
 </section>
 
