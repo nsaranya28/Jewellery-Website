@@ -92,11 +92,12 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
   </div>
 
   <!-- ── NAV ── -->
+  <?php $curPage = basename($_SERVER['PHP_SELF']); ?>
   <nav class="site-nav" id="siteNav">
     <div class="nav-inner container">
-      <a href="<?= SITE_URL ?>/" class="nav-link">Home</a>
+      <a href="<?= SITE_URL ?>/" class="nav-link <?= ($curPage === 'index.php') ? 'active' : '' ?>">Home</a>
       <div class="nav-dropdown">
-        <a href="<?= SITE_URL ?>/shop.php" class="nav-link">Shop <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+        <a href="<?= SITE_URL ?>/shop.php" class="nav-link <?= ($curPage === 'shop.php' && empty($_GET['filter'])) ? 'active' : '' ?>">Shop <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
         <div class="dropdown-menu">
           <a href="<?= SITE_URL ?>/shop.php">All Jewellery</a>
           <?php foreach ($_navCategories as $cat): ?>
@@ -104,12 +105,12 @@ $_navCategories = $pdo->query("SELECT name, slug FROM categories WHERE is_active
           <?php endforeach; ?>
         </div>
       </div>
-      <a href="<?= SITE_URL ?>/shop.php?filter=featured" class="nav-link">Featured</a>
-      <a href="<?= SITE_URL ?>/shop.php?filter=new" class="nav-link">New Arrivals</a>
-      <a href="<?= SITE_URL ?>/shop.php?filter=sale" class="nav-link nav-sale">Sale 🔥</a>
-      <a href="<?= SITE_URL ?>/contact.php" class="nav-link">Contact</a>
+      <a href="<?= SITE_URL ?>/shop.php?filter=featured" class="nav-link <?= ($_GET['filter'] ?? '') === 'featured' ? 'active' : '' ?>">Featured</a>
+      <a href="<?= SITE_URL ?>/shop.php?filter=new" class="nav-link <?= ($_GET['filter'] ?? '') === 'new' ? 'active' : '' ?>">New Arrivals</a>
+      <a href="<?= SITE_URL ?>/shop.php?filter=sale" class="nav-link nav-sale <?= ($_GET['filter'] ?? '') === 'sale' ? 'active' : '' ?>">Sale 🔥</a>
+      <a href="<?= SITE_URL ?>/contact.php" class="nav-link <?= ($curPage === 'contact.php') ? 'active' : '' ?>">Contact</a>
       <?php if (isLoggedIn()): ?>
-        <a href="<?= SITE_URL ?>/my-orders.php" class="nav-link">My Orders</a>
+        <a href="<?= SITE_URL ?>/my-orders.php" class="nav-link <?= ($curPage === 'my-orders.php') ? 'active' : '' ?>">My Orders</a>
       <?php endif; ?>
     </div>
   </nav>
