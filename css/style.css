@@ -205,17 +205,23 @@ input, select, textarea { font-family: var(--font-sans); }
   background: var(--white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-  min-width: 180px;
-  padding: 10px 0;
+  min-width: 200px;
+  padding: 15px;
   z-index: 500;
   border-top: 3px solid var(--gold);
 }
-.nav-dropdown:hover .dropdown-menu { display: block; }
+.nav-dropdown:hover .dropdown-menu { 
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 5px;
+  min-width: 360px;
+}
 .dropdown-menu a {
   display: block;
-  padding: 9px 18px;
+  padding: 8px 15px;
   font-size: 14px;
   color: var(--charcoal);
+  border-radius: var(--radius-sm);
   transition: background var(--transition), color var(--transition);
 }
 .dropdown-menu a:hover { background: var(--gold-pale); color: var(--gold-dark); }
