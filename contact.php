@@ -1,6 +1,26 @@
-<?php
-$pageTitle = "Contact Us — Jewels.com";
 require_once __DIR__ . '/includes/header.php';
+
+// Handle Form Submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name    = trim($_POST['name'] ?? '');
+    $email   = trim($_POST['email'] ?? '');
+    $subject = trim($_POST['subject'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+
+    if ($name && $email && $subject && $message) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO contacts (name, email, subject, message) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$name, $email, $subject, $message]);
+            flashMessage('success', 'Thank you! Your message has been received.');
+            header("Location: contact.php");
+            exit;
+        } catch (PDOException $e) {
+            flashMessage('error', 'Something went wrong. Please try again later.');
+        }
+    } else {
+        flashMessage('error', 'Please fill in all fields.');
+    }
+}
 ?>
 
 <!-- ── CONTACT HERO ────────────────────────────────────────── -->
@@ -81,7 +101,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div class="form-group">
               <label>Email Address</label>
-              <input type="email" name="name" placeholder="you@email.com" required>
+              <input type="email" name="email" placeholder="you@email.com" required>
             </div>
           </div>
           
@@ -127,17 +147,5 @@ require_once __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (typeof showToast === 'function') {
-        showToast('Thank you! Your message has been sent successfully.', 'success');
-        this.reset();
-    } else {
-        alert('Thank you! Your message has been sent successfully.');
-        this.reset();
-    }
-});
-</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
