@@ -134,6 +134,18 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
     </div>
+
+    <!-- ── MAP SECTION ── -->
+    <div style="margin-top: 50px; border-radius: var(--radius-lg); overflow: hidden; height: 450px; border: 1px solid var(--gold-pale); box-shadow: var(--shadow-md); position: relative;">
+      <div style="position: absolute; top: 20px; left: 20px; z-index: 10; background: var(--white); padding: 15px 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border-left: 4px solid var(--gold);">
+        <h4 style="font-family: var(--font-serif); font-size: 18px; color: var(--dark); margin-bottom: 5px;">Find Us</h4>
+        <p style="font-size: 13px; color: var(--gray); margin: 0;">45, Golden Avenue, T. Nagar, Chennai</p>
+      </div>
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.741000!2d80.231000!3d13.041000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52665e!2sT.+Nagar%2C+Chennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1!5m2!1sen!2sin" 
+        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
   </div>
 </section>
 
