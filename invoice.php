@@ -62,7 +62,7 @@ $items = $itemsStmt->fetchAll();
     <div class="inv-title">
       <strong>INVOICE</strong>
       #JW<?= str_pad($order['id'],6,'0',STR_PAD_LEFT) ?><br/>
-      <span style="font-size:12px;">Date: <?= date('d M Y', strtotime($order['created_at'])) ?></span>
+      <span style="font-size:12px;"><strong>Date:</strong> <?= date('d M Y, h:i A', strtotime($order['created_at'])) ?></span>
     </div>
   </div>
 
